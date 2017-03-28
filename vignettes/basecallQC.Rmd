@@ -17,6 +17,16 @@ vignette: |
   %\VignetteEncoding{UTF-8}
 ---
 
+# The bcl2Fastq software
+
+The bcl2Fastq software converts basecalls from Illumina High Throughput Sequencing machines to fastQ files containing sequence information ready for further analysis. 
+
+The conversion of basecalls using the bcl2Fastq software requires multiple input files and parameters which allow the software to correctly basecall as well as demultiplex data into relevant samples by any index information contained within the data. 
+
+For more information on the latest version of bcl2Fastq software, its' installation and its required input files visit the Illumina software's website [here](https://support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/bcl2fastq/bcl2fastq2_guide_15051736_v2.pdf).
+
+
+
 
 # The basecallQC package
 
