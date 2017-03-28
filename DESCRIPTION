@@ -1,0 +1,25 @@
+Package: basecallQC
+Type: Package
+Title: Working with Illumina Basecalling and Demultiplexing input and output files.
+Version: 0.9.9
+Author: Thomas Carroll and Marian Dore
+Maintainer: Thomas Carroll <tc.infomatics@gmail.com>
+Description: To be filled
+LazyData: TRUE
+biocViews: Sequencing, Infrastructure, DataImport, QualityControl
+License: GPL (>= 3)
+Depends: R (>= 3.4), stats, utils, methods, rmarkdown, knitr, prettydoc, BiocStyle, yaml
+Imports: ggplot2, stringr, XML, raster, dplyr, data.table, stringr, tidyr, magrittr, DT, lazyeval, ShortRead
+Suggests: testthat
+VignetteBuilder: knitr
+Collate:
+  processIlluminaSamplesheets_Functions.R
+  processXMLs_Functions.R
+  allClasses.R
+  allMethods.R
+  processExternalFormats_Functions.R
+  plots.R
+  reporting.R
+  tables.R
+  FastQCShortRead_Functions.R
+RoxygenNote: 6.0.1
