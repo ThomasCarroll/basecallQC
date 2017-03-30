@@ -5,10 +5,39 @@
 \alias{BCL2FastQparams-class}
 \alias{BCL2FastQparams}
 \alias{BCL2FastQparams-BCL2FastQparams}
+\alias{BCL2FastQparams}
+\alias{BCL2FastQparams-BCL2FastQparams}
 \title{The Parameters for BCL2FastQparameters object.}
+\usage{
+BCL2FastQparams(runXML = NULL, config = NULL, runDir = NULL,
+  outDir = NULL, verbose = TRUE)
+}
+\arguments{
+\item{runXML}{file path to runParameters.xml ,if not specified
+looks in run directory.}
+
+\item{config}{file path to config.ini ,if not specified
+looks in run directory.}
+
+\item{runDir}{file path to run directory.}
+
+\item{outDir}{file path to run directory.}
+
+\item{verbose}{TRUE or FALSE. Messages on or off. Warnings/errors persist}
+}
 \value{
+A BCL2FastQparams object.
+
 A BCL2FastQparams object.
 }
 \description{
 Parameter class and accessors for use with basecallQC
+
+Parameter class and accessors
+}
+\examples{
+fileLocations <- system.file("extdata",package="basecallQC")
+runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
+config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
+BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 }

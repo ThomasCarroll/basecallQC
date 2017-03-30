@@ -25,7 +25,7 @@ Indexlengths as defined runParameters.xml
 fileLocations <- system.file("extdata",package="basecallQC")
 runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 indexlength <- indexlengths(bcl2fastqparams)
 }
 \author{

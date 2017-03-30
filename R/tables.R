@@ -20,7 +20,7 @@
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' summaryDemuxTable(bclQC,output="static")
 #' @export
@@ -57,7 +57,7 @@ summaryDemuxTable <- function(BCLQC,output="static"){
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' summaryDemuxTable(bclQC,output="static")
 #' @export
@@ -95,7 +95,7 @@ summaryConvStatsTable <- function(BCLQC,output="static"){
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' #makeFQTable(bclQC,output="static")
 #' @export

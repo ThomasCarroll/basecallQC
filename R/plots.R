@@ -3,13 +3,16 @@
 #'
 #' Produces a barplot of basecalling statistics for reads passing filter.
 #'
+#' @usage
+#' \S4method{passFilterBar}{baseCallQC}(object,groupBy,metricToPlot)
 #'
 #' @docType methods
 #' @name passFilterBar
 #' @rdname passFilterBar
-#'
+#' @aliases passFilterBar passFilterBar,baseCallQC-method
+#' 
 #' @author Thomas Carroll and Marian Dore
-#' @param BCLQC baseCallQC A  basecall QC object
+#' @param object baseCallQC A  basecallQC object
 #' @param groupBy Character vector defining how plot will be grouped
 #' @param metricToPlot Character vector defining which metric will be displayed in plot.
 #' @return ggPlotObject A ggplot2 object.
@@ -20,15 +23,15 @@
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' plot <- passFilterBar(bclQC)
 
 #' @export
-passFilterBar <- function(BCLQC,groupBy=c("Lane"),metricToPlot="Yield"){
+passFilterBar.basecallQC <- function(object,groupBy=c("Lane"),metricToPlot="Yield"){
   groupByS <- unique(c(groupBy,"Filter"))
   groupByG <- unique(c(groupBy))
-  toPlot <- BCLQC@baseCallMetrics$convStatsProcessed %>%
+  toPlot <- object@baseCallMetrics$convStatsProcessed %>%
     group_by_(.dots=as.list(groupByS)) %>%
     filter(Sample != "all") %>%
     summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
@@ -44,18 +47,26 @@ passFilterBar <- function(BCLQC,groupBy=c("Lane"),metricToPlot="Yield"){
   return(p)
 }
 
+setGeneric("passFilterBar", function(object="basecallQC",groupBy="character",metricToPlot="character") standardGeneric("passFilterBar"))
+
+#' @rdname passFilterBar
+#' @export
+setMethod("passFilterBar", signature(object="basecallQC"), passFilterBar.basecallQC)
+
 
 #' Boxplot of Illumina basecalling statistics for reads passing filter.
 #'
 #' Produces a boxplot of basecalling statistics for reads passing filter.
 #'
-#'
+#' @usage
+#' \S4method{passFilterBoxplot}{baseCallQC}(object,groupBy,metricToPlot)
 #' @docType methods
 #' @name passFilterBoxplot
 #' @rdname passFilterBoxplot
-#'
+#' @aliases passFilterBoxplot passFilterBoxplot,baseCallQC-method
+#' 
 #' @author Thomas Carroll and Marian Dore
-#' @param BCLQC baseCallQC A  basecall QC object
+#' @param object basecallQC A  basecall QC object
 #' @param groupBy Character vector of how data is grouped for plotting.
 #' @param metricToPlot Character vector defining which metric will be displayed in plot.
 #' @return ggPlotObject A ggplot2 object.
@@ -66,15 +77,14 @@ passFilterBar <- function(BCLQC,groupBy=c("Lane"),metricToPlot="Yield"){
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' plot <- passFilterBoxplot(bclQC,groupBy = "Sample")
-
 #' @export
-passFilterBoxplot <- function(BCLQC,groupBy=c("Lane"),metricToPlot="Yield"){
+passFilterBoxplot.basecallQC <- function(object,groupBy=c("Lane"),metricToPlot="Yield"){
   groupByS <- unique(c("Lane","Sample","Tile","Filter"))
   groupByG <- unique(c(groupBy))
-  toPlot <- BCLQC@baseCallMetrics$convStatsProcessed %>%
+  toPlot <- object@baseCallMetrics$convStatsProcessed %>%
     group_by_(.dots=as.list(groupByS)) %>%
     filter(Sample != "all") %>%
     summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
@@ -90,17 +100,25 @@ passFilterBoxplot <- function(BCLQC,groupBy=c("Lane"),metricToPlot="Yield"){
   return(p)
 }
 
+setGeneric("passFilterBoxplot", function(object="basecallQC",groupBy="character",metricToPlot="character") standardGeneric("passFilterBoxplot"))
+
+#' @rdname passFilterBoxplot
+#' @export
+setMethod("passFilterBoxplot", signature(object="basecallQC"), passFilterBoxplot.basecallQC)
+
+
 #' Tile plot of Illumina basecalling statistics for reads passing filter.
 #'
 #' Produces a plot of metrics per Tile for basecalling statistics of reads passing/failing filter.
 #'
-#'
+#' @usage
+#' \S4method{passFilterTilePlot}{baseCallQC}(object,metricToPlot)
 #' @docType methods
-#' @name passFilterTileplot
-#' @rdname passFilterTileplot
-#'
+#' @name passFilterTilePlot
+#' @rdname passFilterTilePlot
+#' @aliases passFilterTilePlot passFilterTilePlot,baseCallQC-method
 #' @author Thomas Carroll and Marian Dore
-#' @param BCLQC baseCallQC A  basecall QC object
+#' @param object baseCallQC A  basecall QC object
 #' @param metricToPlot Character vector defining which metric will be displayed in plot.
 #' @return ggPlotObject A ggplot2 object.
 #' @import stringr XML RColorBrewer methods raster BiocStyle
@@ -110,14 +128,14 @@ passFilterBoxplot <- function(BCLQC,groupBy=c("Lane"),metricToPlot="Yield"){
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' plot <- passFilterTilePlot(bclQC,metricToPlot="Yield")
 #' @export
-passFilterTilePlot <- function(BCLQC,metricToPlot="Yield"){
+passFilterTilePlot.basecallQC <- function(object,metricToPlot="Yield"){
   groupByS <- unique(c("Lane","Sample","Tile","Filter"))
   #groupByG <- unique(c(groupBy))
-  toPlot <- BCLQC@baseCallMetrics$convStatsProcessed %>%
+  toPlot <- object@baseCallMetrics$convStatsProcessed %>%
     group_by_(.dots=as.list(groupByS)) %>%
     filter(Sample != "all") %>%
     summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
@@ -137,17 +155,25 @@ passFilterTilePlot <- function(BCLQC,metricToPlot="Yield"){
   return(list(PassFilter=pPf,FailFilter=pFf))
 }
 
+setGeneric("passFilterTilePlot", function(object="basecallQC",metricToPlot="character") standardGeneric("passFilterTilePlot"))
+
+#' @rdname passFilterTilePlot
+#' @export
+setMethod("passFilterTilePlot", signature(object="basecallQC"), passFilterTilePlot.basecallQC)
+
+
 #' Boxplot of Illumina demultiplexing statistics.
 #'
 #' Produces a boxplot of for demultiplexing statistics of reads with perfect/mismatched barcode.
 #'
-#'
+#' @usage
+#' \S4method{demuxBoxplot}{baseCallQC}(object,groupBy)
 #' @docType methods
 #' @name demuxBoxplot
 #' @rdname demuxBoxplot
-#'
+#' @aliases demuxBoxplot demuxBoxplot,baseCallQC-method
 #' @author Thomas Carroll and Marian Dore
-#' @param BCLQC baseCallQC A  basecall QC object
+#' @param object baseCallQC A  basecall QC object
 #' @param groupBy Character vector of lane and/or Sample
 #' @return ggPlotObject A ggplot2 object.
 #' @import stringr XML RColorBrewer methods raster BiocStyle
@@ -157,16 +183,16 @@ passFilterTilePlot <- function(BCLQC,metricToPlot="Yield"){
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' plot <- demuxBoxplot(bclQC)
 #' @export
-demuxBoxplot <- function(BCLQC,groupBy=c("Lane")){
+demuxBoxplot.basecallQC <- function(object,groupBy=c("Lane")){
   metricToPlot <- "Count"
   groupByS <- unique(c("Lane","Sample","Project","Barcode","BarcodeStat"))
   groupByG <- unique(c(groupBy))
 
-  toPlot <- BCLQC@demultiplexMetrics$demuxStatsProcessed %>%
+  toPlot <- object@demultiplexMetrics$demuxStatsProcessed %>%
     group_by_(.dots=as.list(groupByS)) %>%
     filter(Sample != "all") %>%
     summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
@@ -182,17 +208,24 @@ demuxBoxplot <- function(BCLQC,groupBy=c("Lane")){
   return(p)
 }
 
+setGeneric("demuxBoxplot", function(object="basecallQC",groupBy="character") standardGeneric("demuxBoxplot"))
+
+#' @rdname demuxBoxplot
+#' @export
+setMethod("demuxBoxplot", signature(object="basecallQC"), demuxBoxplot.basecallQC)
+
 #' Barplot of Illumina demultiplexing statistics.
 #'
 #' Produces a barplot of for demultiplexing statistics of reads with perfect/mismatched barcode.
 #'
-#'
+#' @usage
+#' \S4method{demuxBarplot}{baseCallQC}(object,groupBy)
 #' @docType methods
 #' @name demuxBarplot
 #' @rdname demuxBarplot
-#'
+#' @aliases demuxBarplot demuxBarplot,baseCallQC-method
 #' @author Thomas Carroll and Marian Dore
-#' @param BCLQC baseCallQC A  basecall QC object
+#' @param object baseCallQC A  basecall QC object
 #' @param groupBy Character vector of lane and/or Sample
 #' @return ggPlotObject A ggplot2 object.
 #' @import stringr XML RColorBrewer methods raster BiocStyle
@@ -202,16 +235,16 @@ demuxBoxplot <- function(BCLQC,groupBy=c("Lane")){
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' plot <- demuxBarplot(bclQC)
 #' @export
-demuxBarplot <- function(BCLQC,groupBy=c("Lane")){
+demuxBarplot.basecallQC <- function(object,groupBy=c("Lane")){
   metricToPlot <- "Count"
   groupByS <- unique(c("Lane","Sample","Project","Barcode","BarcodeStat"))
   groupByG <- unique(c(groupBy))
 
-  toPlot <- BCLQC@demultiplexMetrics$demuxStatsProcessed %>%
+  toPlot <- object@demultiplexMetrics$demuxStatsProcessed %>%
     group_by_(.dots=as.list(groupByS)) %>%
     filter(Sample != "all") %>%
     summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
@@ -226,3 +259,10 @@ demuxBarplot <- function(BCLQC,groupBy=c("Lane")){
   p <- ggplot(data=toPlot,aes_string(x=groupByG,y=metricToPlot,fill=groupByG))+geom_bar(stat="identity")+ coord_flip()+facet_grid(BarcodeCount~.)
   return(p)
 }
+
+setGeneric("demuxBarplot", function(object="basecallQC",groupBy="character") standardGeneric("demuxBarplot"))
+
+#' @rdname demuxBarplot
+#' @export
+setMethod("demuxBarplot", signature(object="basecallQC"), demuxBarplot.basecallQC)
+

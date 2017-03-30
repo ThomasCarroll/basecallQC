@@ -3,13 +3,19 @@
 \docType{methods}
 \name{reportBCL}
 \alias{reportBCL}
+\alias{reportBCL.basecallQC}
+\alias{reportBCL,baseCallQC-method}
+\alias{reportBCL,basecallQC-method}
 \title{Generate basecallQC report}
 \usage{
-reportBCL(BCLQC, reportOut = "report.html", reportOutDir = getwd(),
-  output = "static", reportRMDfile = NULL, FQQC = FALSE)
+\S4method{reportBCL}{basecallQC}(object,reportOut,reportOutDir,output,reportRMDfile,FQQC)
+
+\S4method{reportBCL}{basecallQC}(object = "basecallQC",
+  reportOut = "report.html", reportOutDir = getwd(), output = "static",
+  reportRMDfile = NULL, FQQC = FALSE)
 }
 \arguments{
-\item{BCLQC}{A basecall QC object as returned from basecallQC function}
+\item{object}{A basecall QC object as returned from basecallQC function}
 
 \item{reportOut}{Name of report file}
 
@@ -34,7 +40,7 @@ runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 sampleSheet <- dir(fileLocations,pattern="*\\\\.csv",full.names=TRUE)
 outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 reportBCL(bclQC,"TestReport.html",output="html")
 }

@@ -12,7 +12,7 @@ basecallQC(bcl2fastqparams, RunMetaData = NULL, sampleSheet = NULL,
   doFQMetric = FALSE)
 }
 \arguments{
-\item{bcl2fastqparams}{A BCL2FastQparams object as created by setBCL2FastQparams.}
+\item{bcl2fastqparams}{A BCL2FastQparams object as created by BCL2FastQparams..}
 
 \item{RunMetaData}{Any run metadata to attach (data.frame)}
 
@@ -40,6 +40,6 @@ runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 sampleSheet <- dir(fileLocations,pattern="*\\\\.csv",full.names=TRUE)
 outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 }

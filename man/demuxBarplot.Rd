@@ -3,12 +3,18 @@
 \docType{methods}
 \name{demuxBarplot}
 \alias{demuxBarplot}
+\alias{demuxBarplot.basecallQC}
+\alias{demuxBarplot,baseCallQC-method}
+\alias{demuxBarplot,basecallQC-method}
 \title{Barplot of Illumina demultiplexing statistics.}
 \usage{
-demuxBarplot(BCLQC, groupBy = c("Lane"))
+\S4method{demuxBarplot}{baseCallQC}(object,groupBy)
+
+\S4method{demuxBarplot}{basecallQC}(object = "basecallQC",
+  groupBy = c("Lane"))
 }
 \arguments{
-\item{BCLQC}{baseCallQC A  basecall QC object}
+\item{object}{baseCallQC A  basecall QC object}
 
 \item{groupBy}{Character vector of lane and/or Sample}
 }
@@ -24,7 +30,7 @@ runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 sampleSheet <- dir(fileLocations,pattern="*\\\\.csv",full.names=TRUE)
 outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 plot <- demuxBarplot(bclQC)
 }

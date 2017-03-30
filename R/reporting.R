@@ -2,14 +2,15 @@
 #'
 #' Creates a summary report for basecalling and demultiplexing statistics.
 #'
-#'
+#' @usage
+#' \S4method{reportBCL}{basecallQC}(object,reportOut,reportOutDir,output,reportRMDfile,FQQC)
 #' @docType methods
 #' @name reportBCL
 #' @rdname reportBCL
-#'
+#' @aliases reportBCL reportBCL,baseCallQC-method
 #' @author Thomas Carroll
 #'
-#' @param BCLQC A basecall QC object as returned from basecallQC function
+#' @param object A basecall QC object as returned from basecallQC function
 #' @param reportOut Name of report file
 #' @param reportOutDir Directory for the report file
 #' @param output Whether the report contains frozen or sortable tables. Options are "static" and "html"
@@ -24,13 +25,13 @@
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' reportBCL(bclQC,"TestReport.html",output="html")
 #' @export
-reportBCL <- function(BCLQC,reportOut="report.html",reportOutDir=getwd(),
+reportBCL.basecallQC <- function(object,reportOut="report.html",reportOutDir=getwd(),
                       output="static",reportRMDfile=NULL,FQQC=FALSE){
-  BCLQCreport <- BCLQC
+  BCLQCreport <- object
   doFQQC <- FQQC
   fileLocations <- system.file("extdata",package="basecallQC")
   if(is.null(reportRMDfile)){
@@ -40,3 +41,10 @@ reportBCL <- function(BCLQC,reportOut="report.html",reportOutDir=getwd(),
   render(reportRMD,
          output_file = reportOut,output_dir=reportOutDir,params=list(title=paste0("basecallQC")))
 }
+
+setGeneric("reportBCL", function(object="basecallQC",reportOut="character",reportOutDir="character",
+                                 output="character",reportRMDfile=NULL,FQQC=FALSE) standardGeneric("reportBCL"))
+
+#' @rdname reportBCL
+#' @export
+setMethod("reportBCL", signature(object="basecallQC"), reportBCL.basecallQC)

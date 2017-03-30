@@ -31,7 +31,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("BarcodeCount","BarcodeS
 #' runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 #' cleanedSampleSheet <- validateBCLSheet(sampleSheet,param=bcl2fastqparams)
 #'
 #' @export
@@ -84,7 +84,7 @@ validateBCLSheet <- function(sampleSheet,param=bcl2fastqparams){
 #' runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 #'
 #' cleanedSampleSheet <- validateBCLSheet(sampleSheet,param=bcl2fastqparams)
 #' basemasks <- createBasemasks(cleanedSampleSheet,param=bcl2fastqparams)
@@ -136,7 +136,7 @@ createBasemasks <- function(cleanedSampleSheet,param){
 #' runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 #'
 #' cleanedSampleSheet <- validateBCLSheet(sampleSheet,param=bcl2fastqparams)
 #' baseMasks <- createBasemasks(cleanedSampleSheet,param=bcl2fastqparams)

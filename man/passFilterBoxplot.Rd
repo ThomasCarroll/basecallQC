@@ -3,12 +3,18 @@
 \docType{methods}
 \name{passFilterBoxplot}
 \alias{passFilterBoxplot}
+\alias{passFilterBoxplot.basecallQC}
+\alias{passFilterBoxplot,baseCallQC-method}
+\alias{passFilterBoxplot,basecallQC-method}
 \title{Boxplot of Illumina basecalling statistics for reads passing filter.}
 \usage{
-passFilterBoxplot(BCLQC, groupBy = c("Lane"), metricToPlot = "Yield")
+\S4method{passFilterBoxplot}{baseCallQC}(object,groupBy,metricToPlot)
+
+\S4method{passFilterBoxplot}{basecallQC}(object = "basecallQC",
+  groupBy = c("Lane"), metricToPlot = "Yield")
 }
 \arguments{
-\item{BCLQC}{baseCallQC A  basecall QC object}
+\item{object}{basecallQC A  basecall QC object}
 
 \item{groupBy}{Character vector of how data is grouped for plotting.}
 
@@ -26,7 +32,7 @@ runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 sampleSheet <- dir(fileLocations,pattern="*\\\\.csv",full.names=TRUE)
 outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 plot <- passFilterBoxplot(bclQC,groupBy = "Sample")
 }

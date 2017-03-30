@@ -48,7 +48,7 @@ The construction of sample sheets for basecalling and demultiplexing requires sp
 
 The **basecallQC** package uses the **validateBCLSheet** function to both "clean" sample sheets to have valid column and sample names as well as to update sample sheets for versions <= 1.8.9 to be compatable with version >= 2.1.7   
 
-To update or clean a sample sheet, first the parameters for the Run must be captured using the **setBCL2FastQparams** command. The resulting  **BCL2FastQparams** object contains information on the Run parsed from the runParameters.xml file such as the actual index length (often required to correct the sample sheet specified lengths). 
+To update or clean a sample sheet, first the parameters for the Run must be captured using the **BCL2FastQparams** command. The resulting  **BCL2FastQparams** object contains information on the Run parsed from the runParameters.xml file such as the actual index length (often required to correct the sample sheet specified lengths). 
 
 Once the **BCL2FastQparams** object has been created, a sample sheet file name can be passed to the **validateBCLSheet** alongside the **BCL2FastQparams** object to create a valid sample sheet object,  which may then be written to file.
 
@@ -71,7 +71,7 @@ This sample sheet contains invalid Sample names e.g. A 1 (whitespace) and 08.HDO
 
 ```{r, cleaning2, fig.show='hold',warning=FALSE,message=FALSE}
 
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 cleanedSampleSheet <- validateBCLSheet(sampleSheet[1],param=bcl2fastqparams)
 head(cleanedSampleSheet)
 
@@ -101,7 +101,7 @@ The specification of indexes in sample sheets from versions <= 1.8.9 were in a s
 
 ```{r, updating2, fig.show='hold',warning=FALSE,message=FALSE}
 
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 cleanedSampleSheet <- validateBCLSheet(sampleSheet[2],param=bcl2fastqparams)
 head(cleanedSampleSheet)
 
@@ -120,7 +120,7 @@ fileLocations <- system.file("extdata",package="basecallQC")
 runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 cleanedSampleSheet <- validateBCLSheet(sampleSheet,param=bcl2fastqparams)
 baseMasks <- createBasemasks(cleanedSampleSheet,param=bcl2fastqparams)
 baseMasks$index1Mask
@@ -150,7 +150,7 @@ runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 class(bclQC)
 ```

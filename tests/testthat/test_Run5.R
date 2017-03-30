@@ -5,7 +5,7 @@ fileLocations <- system.file("extdata",package="basecallQC")
 runXML <- dir(file.path(fileLocations,"Runs/170303_D00467_0231_ACAK02ANXX/"),pattern="runParameters.xml",full.names=TRUE)
 config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 sampleSheet <- dir(file.path(fileLocations,"Runs/170303_D00467_0231_ACAK02ANXX/"),pattern="*\\.csv",full.names=TRUE)
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 
 #'

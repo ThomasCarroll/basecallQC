@@ -5,7 +5,7 @@ runXML <- dir(file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/"),pat
 config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 sampleSheet <- dir(file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/"),pattern="*\\.csv",full.names=TRUE)
 outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 plot <- passFilterBoxplot(bclQC,groupBy = "Sample")
 expect_that(class(plot)[2] == "ggplot",

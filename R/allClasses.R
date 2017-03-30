@@ -34,9 +34,9 @@ setClass("basecallQC", representation(BCL2FastQparams="BCL2FastQparams",RunMetad
 #'
 #' Parameter class and accessors
 #'
-#' @aliases setBCL2FastQparams setBCL2FastQparams-setBCL2FastQparams
+#' @aliases BCL2FastQparams BCL2FastQparams-BCL2FastQparams
 #'
-#' @rdname setBCL2FastQparams
+#' @rdname BCL2FastQparams
 #' @docType methods
 #' @param runXML file path to runParameters.xml ,if not specified
 #' looks in run directory.
@@ -50,10 +50,9 @@ setClass("basecallQC", representation(BCL2FastQparams="BCL2FastQparams",RunMetad
 #' fileLocations <- system.file("extdata",package="basecallQC")
 #' runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
-#' setBCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
+#' BCL2FastQparams(runXML,config,runDir=getwd(),verbose=FALSE)
 #' @export
-
-setBCL2FastQparams <- function(runXML=NULL,config=NULL,runDir=NULL,outDir=NULL,verbose=TRUE){
+BCL2FastQparams <- function(runXML=NULL,config=NULL,runDir=NULL,outDir=NULL,verbose=TRUE){
   if(is.null(runDir)) runDir <- getwd(); if(verbose) message("No runDir specified, run directory set to working directory");
   if(is.null(runXML)){
     if(verbose) message("No location for runParameters.xml specified")
@@ -84,7 +83,7 @@ setBCL2FastQparams <- function(runXML=NULL,config=NULL,runDir=NULL,outDir=NULL,v
 #'
 #' @name basecallQC
 #' @rdname basecallQC
-#' @param bcl2fastqparams A BCL2FastQparams object as created by setBCL2FastQparams.
+#' @param bcl2fastqparams A BCL2FastQparams object as created by BCL2FastQparams..
 #' @param RunMetaData Any run metadata to attach (data.frame)
 #' @param sampleSheet The samplesheet for basecalling
 #' @param doFQMetric TRUE or FALSE. Perform ShortRead FastQ quality assessment
@@ -96,7 +95,7 @@ setBCL2FastQparams <- function(runXML=NULL,config=NULL,runDir=NULL,outDir=NULL,v
 #' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
 #' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
 #' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
-#' bcl2fastqparams <- setBCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' @export
 basecallQC <- function(bcl2fastqparams,RunMetaData=NULL,sampleSheet=NULL,doFQMetric=FALSE){
