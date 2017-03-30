@@ -29,17 +29,17 @@ processDemultiplex <- function(demuxStatsXML){
   Projects <- demuxStatsXML_root[[1]]
   flowcellID <- xmlAttrs(Projects)
   Projects_Info <- list()
-  for(p in 1:length(Projects)){
+  for(p in seq_along(Projects)){
     Project <- Projects[[p]]
     Project_Name <- xmlAttrs(Project)
     Project_Sample_Info <- list()
-    for(s in 1:length(Project)){
+    for(s in seq_along(Project)){
       Sample <- Project[[s]]
       Sample_Name <- xmlAttrs(Sample)
       Sample_BarcodeExpected <- Sample[[1]]
       Sample_BarcodeExpected_Name <- xmlAttrs(Sample[[1]])
       Project_Sample_BarcodeExpected_Lane_Info <- list()
-      for(b in 1:length(Sample_BarcodeExpected)){
+      for(b in seq_along(Sample_BarcodeExpected)){
         Lane <- Sample_BarcodeExpected[[b]]
         Lane_Name <- xmlAttrs(Lane)
         Lane_BarcodeCount <- as.integer(xmlValue(Lane[["BarcodeCount"]]))
@@ -107,31 +107,31 @@ processConvStats <- function(ConvStatsXML){
 
   Projects <- Projects[names(Projects) == "Project"]
   Projects_Info <- list()
-  for(p in 1:length(Projects)){
+  for(p in seq_along(Projects)){
     Project <- Projects[[p]]
     Project_Name <- xmlAttrs(Project)
     Project_Sample_Info <- list()
-    for(s in 1:length(Project)){
+    for(s in seq_along(Project)){
       Sample <- Project[[s]]
       Sample_Name <- xmlAttrs(Sample)
       Sample_BarcodeExpected <- Sample[[1]]
       Sample_BarcodeExpected_Name <- xmlAttrs(Sample[[1]])
       Project_Sample_BarcodeExpected_Lane_Info <- list()
       Lane_Info <- list()
-      for(b in 1:length(Sample_BarcodeExpected)){
+      for(b in seq_along(Sample_BarcodeExpected)){
         Lane <- Sample_BarcodeExpected[[b]]
         Lane_Name <- xmlAttrs(Lane)
         Tile_Info <- list()
-        for(t in 1:length(Lane)){
+        for(t in seq_along(Lane)){
           Tile <- Lane[[t]]
           Tile_Name <- xmlAttrs(Tile)
           FilterState_Info <- list()
-          for(f in 1:length(Tile)){
+          for(f in seq_along(Tile)){
             FilterState <- Tile[[f]]
             FilterState_Name <- xmlName(FilterState)
             FilterState_ClusterCount <- as.integer(xmlValue(FilterState[["ClusterCount"]]))
             ReadNumber_Info <- list()
-            for(r in 2:length(FilterState)){
+            for(r in seq_along(FilterState)[-1]){
 
               Read <-  FilterState[[r]]
               ReadNumber <-  xmlAttrs(Read)
@@ -140,7 +140,9 @@ processConvStats <- function(ConvStatsXML){
               ReadNumber_QualityScoreSum <- as.numeric(xmlValue(Read[["QualityScoreSum"]]))
               ReadNumber_Info[[r-1]] <- data.frame(Yield = ReadNumber_Yield,
                                                    Yield30 = ReadNumber_YieldQ30,
-                                                   QualityScoreSum = ReadNumber_QualityScoreSum
+                                                   QualityScoreSum = ReadNumber_QualityScoreSum,
+                                                   ClusterCount = FilterState_ClusterCount
+                                                   
               )
 
               names(ReadNumber_Info)[r-1] <- paste0("Read_",ReadNumber)

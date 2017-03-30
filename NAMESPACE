@@ -31,12 +31,19 @@ exportMethods(readlengths)
 
 #Imports: data.table, dplyr, DT, ggplot2, IRanges, knitr, lazyeval, magrittr, methods, raster, rmarkdown,
 #         Rsamtools, S4Vectors, ShortRead, stats, stringr, tidyr, utils, XML
+import(knitr)
+
+import(rmarkdown)
+
+import(yaml)
+
+import(prettydoc)
 
 importClassesFrom(methods, character, data.frame, list)
 
 importMethodsFrom(raster, as.data.frame, as.list, nrow, unique)
 
-importMethodsFrom(ShortRead, lapply, rbind, report, sapply)
+importMethodsFrom(ShortRead, lapply, rbind, report, sapply, qa)
 
 importMethodsFrom(XML, xmlToDataFrame)
 

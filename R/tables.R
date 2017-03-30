@@ -31,7 +31,7 @@ summaryDemuxTable <- function(BCLQC,output="static"){
     return(kable(toTable))
   }
   if(output=="html"){
-    return(DT:::datatable(toTable))
+    return(DT::datatable(toTable))
   }
 }
 
@@ -68,7 +68,7 @@ summaryConvStatsTable <- function(BCLQC,output="static"){
     return(kable(toTable))
   }
   if(output=="html"){
-    return(DT:::datatable(toTable))
+    return(DT::datatable(toTable))
   }
 }
 
@@ -107,7 +107,7 @@ makeFQTable <- function(BCLQC,output="static"){
         table <- kable(fqQCTable,escape = FALSE)
       }
       if(output=="html"){
-        table <- DT:::datatable(fqQCTable,escape=FALSE)
+        table <- DT::datatable(fqQCTable,escape=FALSE)
       }
       return(table)
     }else{

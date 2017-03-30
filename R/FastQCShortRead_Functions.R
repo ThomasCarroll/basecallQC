@@ -1,5 +1,5 @@
 qcShortRead <- function(fastqs,reportOutDir=getwd()){
-  qaSamples <- lapply(fastqs,ShortRead::qa)
+  qaSamples <- lapply(fastqs,qa)
   names(qaSamples) <- gsub("\\.fastq.*|fq.*","",basename(fastqs))
   reportOutFiles <- lapply(names(qaSamples),function(x){
     report(qaSamples[[x]],dest = file.path(reportOutDir,x))

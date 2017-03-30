@@ -1,3 +1,13 @@
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("BarcodeCount","BarcodeStat","Box","Count","ID",
+                                                        "IndexRead1","IndexRead2","Name","PassFilter",
+                                                        "PerfectBarcodeCount","Pf","Pos","Project",
+                                                        "Raw","Read1","Read2","Sample","SampleID",
+                                                        "SampleName","Sample_ID","Sample_Name",
+                                                        "Sample_Project","Tile","Yield","bcl2fastqparams",
+                                                        "index","index2","Index","Index2","Lane","basemask",
+                                                        "index1Mask","index2Mask","indexLength","indexLength2",
+                                                        "read1Mask","read2Mask","."))
+
 
 #' Illumina samplesheet cleaning and updating for
 #' bcl2Fastq versions >= 2.1.7
@@ -29,14 +39,14 @@ validateBCLSheet <- function(sampleSheet,param=bcl2fastqparams){
   #runParam <- runParameters(param)
   fread(sampleSheet,sep=",",header=TRUE,stringsAsFactors=FALSE,skip="Sample") %>%
     tbl_df %>%
-  {if(exists('Project', where = .) & !exists('Sample_Project', where = .)) dplyr:::rename(.,Sample_Project = Project) else .} %>%
-  {if(exists('SampleID', where = .) & !exists('Sample_ID', where = .)) dplyr:::rename(.,Sample_ID = SampleID) else .} %>%
-  {if(exists('ID', where = .) & !exists('Sample_ID', where = .)) dplyr:::rename(.,Sample_ID = ID) else .} %>%
-  {if(exists('SampleName', where = .) & !exists('Sample_Name', where = .)) dplyr:::rename(.,Sample_Name = SampleName) else .} %>%
-  {if(exists('Name', where = .) & !exists('Sample_Name', where = .)) dplyr:::rename(.,Sample_Name = Name) else .} %>%
-  {if(exists('index', where = .) & !exists('Index', where = .)) dplyr:::rename(.,Index = index) else .} %>%
-  {if(exists('index2', where = .) & !exists('Index2', where = .)) dplyr:::rename(.,Index2 = index2) else .} %>%
-  {if(!exists('Index2', where = .)) tidyr:::separate(.,Index, c("Index", "Index2"), "-",fill="right") else .} %>%
+  {if(exists('Project', where = .) & !exists('Sample_Project', where = .)) dplyr::rename(.,Sample_Project = Project) else .} %>%
+  {if(exists('SampleID', where = .) & !exists('Sample_ID', where = .)) dplyr::rename(.,Sample_ID = SampleID) else .} %>%
+  {if(exists('ID', where = .) & !exists('Sample_ID', where = .)) dplyr::rename(.,Sample_ID = ID) else .} %>%
+  {if(exists('SampleName', where = .) & !exists('Sample_Name', where = .)) dplyr::rename(.,Sample_Name = SampleName) else .} %>%
+  {if(exists('Name', where = .) & !exists('Sample_Name', where = .)) dplyr::rename(.,Sample_Name = Name) else .} %>%
+  {if(exists('index', where = .) & !exists('Index', where = .)) dplyr::rename(.,Index = index) else .} %>%
+  {if(exists('index2', where = .) & !exists('Index2', where = .)) dplyr::rename(.,Index2 = index2) else .} %>%
+  {if(!exists('Index2', where = .)) tidyr::separate(.,Index, c("Index", "Index2"), "-",fill="right") else .} %>%
     mutate(Sample_Project = if (exists('Sample_Project', where = .)) Sample_Project else NA,
            Lane = if (exists('Lane', where = .)) Lane else NA,
            Sample_ID = if (exists('Sample_ID', where = .)) Sample_ID else NA,
@@ -44,7 +54,7 @@ validateBCLSheet <- function(sampleSheet,param=bcl2fastqparams){
            Index = if (exists('Index', where = .)) Index else NA,
            Index2 = if (exists('Index2', where = .)) Index2 else NA) %>%
     tbl_df %>%
-    dplyr:::select(Sample_Project,Lane,Sample_ID,Sample_Name,Index,Index2,everything()) %>%
+    dplyr::select(Sample_Project,Lane,Sample_ID,Sample_Name,Index,Index2,everything()) %>%
     mutate(Sample_ID=gsub("^X\\d+.\\.","Sample_",validNames(Sample_ID))) %>%
     mutate(Sample_ID=gsub("\\?|\\(|\\)|\\[|\\]|\\\\|/|\\=|\\+|<|>|\\:|\\;|\"|\'|\\*|\\^|\\||\\&|\\.","_",Sample_ID)) %>%
     mutate(Index=str_trim(Index,"both"),
@@ -84,7 +94,7 @@ createBasemasks <- function(cleanedSampleSheet,param){
   indexCombinations <- cleanedSampleSheet %>%
     mutate(Index2=ifelse(is.na(Index2), "", Index2),Index=ifelse(is.na(Index), "", Index)) %>%
     mutate(indexLength=str_length(Index),indexLength2=str_length(Index2)) %>%
-    dplyr:::group_by(Lane) %>% dplyr:::count(indexLength,indexLength2)
+    dplyr::group_by(Lane) %>% dplyr::count(indexLength,indexLength2)
 
   if(nrow(indexCombinations) == length(unique(indexCombinations$Lane))){
     baseMasks <- indexCombinations %>%
@@ -100,7 +110,7 @@ createBasemasks <- function(cleanedSampleSheet,param){
       mutate(basemask = str_c(Lane,":",basemask)) %>%
       mutate(basemask = str_replace(basemask,",,",",")) %>%
       tbl_df %>%
-      dplyr:::select(Lane,basemask,read1Mask,index1Mask,index2Mask,read2Mask)
+      dplyr::select(Lane,basemask,read1Mask,index1Mask,index2Mask,read2Mask)
       }
 }
 
@@ -137,7 +147,7 @@ createBCLcommand <- function(bcl2fastqparams,cleanedSampleSheet,baseMasks){
   bclPath <- bcl2fastqparams@RunParameters$configParams[bcl2fastqparams@RunParameters$configParams$name == "configureBclToFastq","value"]
   write.table("[DATA]",file=sampleSheetLocation,sep="",quote=FALSE,row.names=FALSE)
   write.table(cleanedSampleSheet,file=sampleSheetLocation,sep=",",quote=FALSE,row.names=FALSE,append = TRUE)
-  baseMasksToUse <- str_c("--use-bases-mask ",dplyr:::select(tbl_df(baseMasks),basemask)$basemask,collapse = " ")
+  baseMasksToUse <- str_c("--use-bases-mask ",dplyr::select(tbl_df(baseMasks),basemask)$basemask,collapse = " ")
   bclcommand <- str_c(as.vector(bclPath$value),"--output-dir ",bcl2fastqparams@OutDir,"--sample-sheet",sampleSheetLocation,baseMasksToUse,sep=" ")
   return(bclcommand)
 }

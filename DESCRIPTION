@@ -1,6 +1,6 @@
 Package: basecallQC
 Type: Package
-Title: Working with Illumina Basecalling and Demultiplexing input and output files.
+Title: Working with Illumina Basecalling and Demultiplexing input and output files
 Version: 0.99.0
 Author: Thomas Carroll and Marian Dore
 Maintainer: Thomas Carroll <tc.infomatics@gmail.com>
@@ -8,9 +8,9 @@ Description: The basecallQC package provides tools to work with Illumina bcl2Fas
 LazyData: TRUE
 biocViews: Sequencing, Infrastructure, DataImport, QualityControl
 License: GPL (>= 3)
-Depends: R (>= 3.4), stats, utils, methods, rmarkdown, knitr, prettydoc, BiocStyle, yaml
-Imports: ggplot2, stringr, XML, raster, dplyr, data.table, stringr, tidyr, magrittr, DT, lazyeval, ShortRead
-Suggests: testthat
+Depends: R (>= 3.4), stats, utils, methods, rmarkdown, knitr, prettydoc, yaml
+Imports: ggplot2, stringr, XML, raster, dplyr, data.table, tidyr, magrittr, DT, lazyeval, ShortRead
+Suggests: testthat, BiocStyle
 VignetteBuilder: knitr
 SystemRequirements: bcl2Fastq (versions >= 2.1.7)
 Collate:

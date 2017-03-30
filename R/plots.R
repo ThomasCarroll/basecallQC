@@ -37,9 +37,9 @@ passFilterBar <- function(BCLQC,groupBy=c("Lane"),metricToPlot="Yield"){
     ,metricToPlot)) %>%
     spread_("Filter",metricToPlot) %>%
     mutate(Ff=Raw-Pf) %>%
-    dplyr:::select(-Raw) %>%
+    dplyr::select(-Raw) %>%
     tbl_df %>%
-    gather_(key="PassFilter",value=as.name(metricToPlot),c("Ff","Pf"))
+    gather_(key_col="PassFilter",value_col=as.name(metricToPlot),c("Ff","Pf"))
   p <- ggplot(data=toPlot,aes_string(x=groupByG,y=metricToPlot,fill="PassFilter"))+geom_bar(stat = "identity")+ coord_flip()
   return(p)
 }
@@ -83,9 +83,9 @@ passFilterBoxplot <- function(BCLQC,groupBy=c("Lane"),metricToPlot="Yield"){
     ,metricToPlot)) %>%
     spread_("Filter",metricToPlot) %>%
     mutate(Ff=Raw-Pf) %>%
-    dplyr:::select(-Raw) %>%
+    dplyr::select(-Raw) %>%
     tbl_df %>%
-    gather_(key="PassFilter",value=as.name(metricToPlot),c("Ff","Pf"))
+    gather_(key_col="PassFilter",value_col=as.name(metricToPlot),c("Ff","Pf"))
   p <- ggplot(data=toPlot,aes_string(x=groupByG,y="Yield",fill="PassFilter"))+geom_violin(scale="width")+ coord_flip()+facet_grid(PassFilter~.,scales = "free")+geom_jitter()
   return(p)
 }
@@ -126,9 +126,9 @@ passFilterTilePlot <- function(BCLQC,metricToPlot="Yield"){
     ,metricToPlot)) %>%
     spread_("Filter",metricToPlot) %>%
     mutate(Ff=Raw-Pf) %>%
-    dplyr:::select(-Raw) %>%
+    dplyr::select(-Raw) %>%
     tbl_df %>%
-    gather_(key="PassFilter",value=as.name(metricToPlot),c("Ff","Pf")) %>%
+    gather_(key_col="PassFilter",value_col=as.name(metricToPlot),c("Ff","Pf")) %>%
     mutate(Surface=str_sub(Tile,1,1),Box=str_sub(Tile,2,2),Pos=str_sub(Tile,3))
     pPf <- filter(toPlot,PassFilter=="Pf") %>%
     ggplot(aes(x=Box,y=Pos))+geom_tile(aes_string(fill=metricToPlot))+facet_grid(~Lane)+scale_fill_gradient2(low = "white", high = "darkblue")+theme_bw()
@@ -175,9 +175,9 @@ demuxBoxplot <- function(BCLQC,groupBy=c("Lane")){
     ,metricToPlot)) %>%
     spread_("BarcodeStat",metricToPlot) %>%
     mutate(mismatchedBarcodeCount=BarcodeCount-PerfectBarcodeCount) %>%
-    dplyr:::select(-BarcodeCount) %>%
+    dplyr::select(-BarcodeCount) %>%
     tbl_df %>%
-    gather_(key="BarcodeCount",value=as.name(metricToPlot),c("mismatchedBarcodeCount","PerfectBarcodeCount"))
+    gather_(key_col="BarcodeCount",value_col=as.name(metricToPlot),c("mismatchedBarcodeCount","PerfectBarcodeCount"))
     p <- ggplot(data=toPlot,aes_string(x=groupByG,y=metricToPlot,fill="BarcodeCount"))+geom_violin(scale = "width")+ coord_flip()+facet_grid(BarcodeCount~.)
   return(p)
 }
@@ -220,9 +220,9 @@ demuxBarplot <- function(BCLQC,groupBy=c("Lane")){
     ,metricToPlot)) %>%
     spread_("BarcodeStat",metricToPlot) %>%
     mutate(mismatchedBarcodeCount=BarcodeCount-PerfectBarcodeCount) %>%
-    dplyr:::select(-BarcodeCount) %>%
+    dplyr::select(-BarcodeCount) %>%
     tbl_df %>%
-    gather_(key="BarcodeCount",value=as.name(metricToPlot),c("mismatchedBarcodeCount","PerfectBarcodeCount"))
+    gather_(key_col="BarcodeCount",value_col=as.name(metricToPlot),c("mismatchedBarcodeCount","PerfectBarcodeCount"))
   p <- ggplot(data=toPlot,aes_string(x=groupByG,y=metricToPlot,fill=groupByG))+geom_bar(stat="identity")+ coord_flip()+facet_grid(BarcodeCount~.)
   return(p)
 }
