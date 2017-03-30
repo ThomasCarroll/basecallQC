@@ -105,8 +105,8 @@ basecallQC <- function(bcl2fastqparams,RunMetaData=NULL,sampleSheet=NULL,doFQMet
   toSubmit <- createBCLcommand(bcl2fastqparams,cleanedSampleSheet,baseMasks)
   basecallmetrics <- baseCallMetrics(bcl2fastqparams)
   demultiplexmetrics <- demultiplexMetrics(bcl2fastqparams)
-  if(doFQMetric==TRUE){
-    fastqs <- dir("~/Documents/test2/fastq2/",pattern="*.fastq.gz",full.names=TRUE)[1:2]
+  fastqs <- dir(bcl2fastqparams@OutDir,pattern="*.fastq.gz",full.names=TRUE)
+  if(doFQMetric==TRUE & length(fastqs) > 0){
     fqQCmetrics <- qcShortRead(fastqs)
   }else{
     fqQCmetrics <- list(FQQC_Table = NULL,ShortReadQC=NULL)
