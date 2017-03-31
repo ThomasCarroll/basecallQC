@@ -21,19 +21,28 @@ looks in run directory.}
 
 \item{runDir}{file path to run directory.}
 
-\item{outDir}{file path to run directory.}
+\item{outDir}{file path to out directory.}
 
 \item{verbose}{TRUE or FALSE. Messages on or off. Warnings/errors persist}
 }
 \value{
 A BCL2FastQparams object.
 
-A BCL2FastQparams object.
+A BCL2FastQparams object (See details).
 }
 \description{
 Parameter class and accessors for use with basecallQC
 
 Parameter class and accessors
+}
+\details{
+The BCL2FastQparams object contains slots RunDir, OutDir and RunParameters
+\itemize{
+\item{"RunDir"}{ Character string specifying the top level Run directory}
+\item{"OutDir"}{ Character string specifying the output directory}
+\item{"RunParameters"}{ A data.frame containing the information from runParameters.xml (See vignette for more details).
+}
+}
 }
 \examples{
 fileLocations <- system.file("extdata",package="basecallQC")

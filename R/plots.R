@@ -266,3 +266,29 @@ setGeneric("demuxBarplot", function(object="basecallQC",groupBy="character") sta
 #' @export
 setMethod("demuxBarplot", signature(object="basecallQC"), demuxBarplot.basecallQC)
 
+demuxBarplot.list <- function(object,groupBy=c("Lane")){
+  metricToPlot <- "Count"
+  groupByS <- unique(c("Lane","Sample","Project","Barcode","BarcodeStat"))
+  groupByG <- unique(c(groupBy))
+  
+  toPlot <- object$demuxStatsProcessed %>%
+    group_by_(.dots=as.list(groupByS)) %>%
+    filter(Sample != "all") %>%
+    summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
+                                             var=as.name(metricToPlot))),
+                                metricToPlot)) %>%
+    spread_("BarcodeStat",metricToPlot) %>%
+    mutate(mismatchedBarcodeCount=BarcodeCount-PerfectBarcodeCount) %>%
+    dplyr::select(-BarcodeCount) %>%
+    tbl_df %>%
+    gather_(key_col="BarcodeCount",value_col=as.name(metricToPlot),c("mismatchedBarcodeCount","PerfectBarcodeCount"))
+  p <- ggplot(data=toPlot,aes_string(x=groupByG,y=metricToPlot,fill=groupByG))+geom_bar(stat="identity")+ coord_flip()+facet_grid(BarcodeCount~.)
+  return(p)
+}
+
+#' @rdname demuxBarplot
+#' @export
+setMethod("demuxBarplot", signature(object="list"), demuxBarplot.list)
+
+
+  

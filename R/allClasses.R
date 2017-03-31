@@ -43,9 +43,16 @@ setClass("basecallQC", representation(BCL2FastQparams="BCL2FastQparams",RunMetad
 #' @param config file path to config.ini ,if not specified
 #' looks in run directory.
 #' @param runDir file path to run directory.
-#' @param outDir file path to run directory.
+#' @param outDir file path to out directory.
 #' @param verbose TRUE or FALSE. Messages on or off. Warnings/errors persist
-#' @return A BCL2FastQparams object.
+#' @details The BCL2FastQparams object contains slots RunDir, OutDir and RunParameters
+#' \itemize{
+#' \item{"RunDir"}{ Character string specifying the top level Run directory}
+#' \item{"OutDir"}{ Character string specifying the output directory}
+#' \item{"RunParameters"}{ A data.frame containing the information from runParameters.xml (See vignette for more details).
+#' }
+#' }
+#' @return A BCL2FastQparams object (See details).
 #' @examples
 #' fileLocations <- system.file("extdata",package="basecallQC")
 #' runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
@@ -83,12 +90,30 @@ BCL2FastQparams <- function(runXML=NULL,config=NULL,runDir=NULL,outDir=NULL,verb
 #'
 #' @name basecallQC
 #' @rdname basecallQC
-#' @param bcl2fastqparams A BCL2FastQparams object as created by BCL2FastQparams..
+#' @param bcl2fastqparams A BCL2FastQparams object as created by BCL2FastQparams() constructor.
 #' @param RunMetaData Any run metadata to attach (data.frame)
-#' @param sampleSheet The samplesheet for basecalling
+#' @param sampleSheet The sample sheet for Illumina basecalling using bcl2Fastq versions >= 2.1.7
 #' @param doFQMetric TRUE or FALSE. Perform ShortRead FastQ quality assessment
 #' using ShortRead's qa and report function
-#' @return basecallQC a basecallQC object
+#' @return basecallQC a basecallQC object (See details for more information)
+#' @details The basecallQC object contains slots BCL2FastQparams,
+#'  cleanedSampleSheet, baseMasks, BCLCommand, baseCallMetrics, demultiplexMetrics and fqQCmetrics.
+#' \itemize{
+#' \item{"BCL2FastQparams"}{ A BCL2FastQparams object}
+#' \item{"cleanedSampleSheet"}{ A data.frame containing the cleaned sample sheet for
+#'  Illumina basecalling using bcl2Fastq versions >= 2.1.7
+#' }
+#' \item{"baseMasks"}{ A data.frame containing basecall masks per lane for use with bcl2Fastq versions >= 2.1.7. Basemasks in data.frame for reads and indexes as well as the total basemasks for each lane.
+#' }
+#' \item{"BCLCommand"}{ A character string containing the command to be used for basecalling using bcl2Fastq.
+#' }
+#' \item{"baseCallMetrics"}{ A list containing the full basecalling metrics from ConversionStats.xml. Contains an unsummarised data.frame and basecalling metrics summarised to Sample, Lane, Sample by lane, and Sample by Lane and Tile
+#' }
+#' \item{"demultiplexMetrics"}{ A list containing the full demultiplexing metrics from DemultiplexingStats.xml. Contains an unsummarised data.frame and demultiplexing metrics filtered to per Sample metrics
+#' }
+#' \item{"fqQCmetrics"}{ A list containing a data.frame of read counts and links to ShortRead QA reports and a ShortRead QA object containing quality information for generated fastQs.
+#' }
+#' }
 #' @examples
 #' fileLocations <- system.file("extdata",package="basecallQC")
 #' runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)

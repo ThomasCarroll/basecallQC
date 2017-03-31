@@ -6,12 +6,15 @@
 \alias{demuxBarplot.basecallQC}
 \alias{demuxBarplot,baseCallQC-method}
 \alias{demuxBarplot,basecallQC-method}
+\alias{demuxBarplot,list-method}
 \title{Barplot of Illumina demultiplexing statistics.}
 \usage{
 \S4method{demuxBarplot}{baseCallQC}(object,groupBy)
 
 \S4method{demuxBarplot}{basecallQC}(object = "basecallQC",
   groupBy = c("Lane"))
+
+\S4method{demuxBarplot}{list}(object = "basecallQC", groupBy = c("Lane"))
 }
 \arguments{
 \item{object}{baseCallQC A  basecall QC object}

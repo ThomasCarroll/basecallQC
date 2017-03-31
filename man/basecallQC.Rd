@@ -12,11 +12,11 @@ basecallQC(bcl2fastqparams, RunMetaData = NULL, sampleSheet = NULL,
   doFQMetric = FALSE)
 }
 \arguments{
-\item{bcl2fastqparams}{A BCL2FastQparams object as created by BCL2FastQparams..}
+\item{bcl2fastqparams}{A BCL2FastQparams object as created by BCL2FastQparams() constructor.}
 
 \item{RunMetaData}{Any run metadata to attach (data.frame)}
 
-\item{sampleSheet}{The samplesheet for basecalling}
+\item{sampleSheet}{The sample sheet for Illumina basecalling using bcl2Fastq versions >= 2.1.7}
 
 \item{doFQMetric}{TRUE or FALSE. Perform ShortRead FastQ quality assessment
 using ShortRead's qa and report function}
@@ -24,7 +24,7 @@ using ShortRead's qa and report function}
 \value{
 A basecallQC object.
 
-basecallQC a basecallQC object
+basecallQC a basecallQC object (See details for more information)
 }
 \description{
 Objects and methods to handle Illumina basecalling/demultiplexing
@@ -33,6 +33,26 @@ Provides sample sheet cleanup, basecall command and
 summary QC statistics for basecalling/demultiplexing.
 
 The basecallQC function is a constructor for basecallQC objects.
+}
+\details{
+The basecallQC object contains slots BCL2FastQparams,
+ cleanedSampleSheet, baseMasks, BCLCommand, baseCallMetrics, demultiplexMetrics and fqQCmetrics.
+\itemize{
+\item{"BCL2FastQparams"}{ A BCL2FastQparams object}
+\item{"cleanedSampleSheet"}{ A data.frame containing the cleaned sample sheet for
+ Illumina basecalling using bcl2Fastq versions >= 2.1.7
+}
+\item{"baseMasks"}{ A data.frame containing basecall masks per lane for use with bcl2Fastq versions >= 2.1.7. Basemasks in data.frame for reads and indexes as well as the total basemasks for each lane.
+}
+\item{"BCLCommand"}{ A character string containing the command to be used for basecalling using bcl2Fastq.
+}
+\item{"baseCallMetrics"}{ A list containing the full basecalling metrics from ConversionStats.xml. Contains an unsummarised data.frame and basecalling metrics summarised to Sample, Lane, Sample by lane, and Sample by Lane and Tile
+}
+\item{"demultiplexMetrics"}{ A list containing the full demultiplexing metrics from DemultiplexingStats.xml. Contains an unsummarised data.frame and demultiplexing metrics filtered to per Sample metrics
+}
+\item{"fqQCmetrics"}{ A list containing a data.frame of read counts and links to ShortRead QA reports and a ShortRead QA object containing quality information for generated fastQs.
+}
+}
 }
 \examples{
 fileLocations <- system.file("extdata",package="basecallQC")
