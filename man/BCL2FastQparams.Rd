@@ -7,17 +7,17 @@
 \alias{BCL2FastQparams-BCL2FastQparams}
 \alias{BCL2FastQparams}
 \alias{BCL2FastQparams-BCL2FastQparams}
-\title{The Parameters for BCL2FastQparameters object.}
+\title{The Parameters for BCL2FastQparams object.}
 \usage{
 BCL2FastQparams(runXML = NULL, config = NULL, runDir = NULL,
   outDir = NULL, verbose = TRUE)
 }
 \arguments{
 \item{runXML}{file path to runParameters.xml ,if not specified
-looks in run directory.}
+looks in top level of run directory.}
 
 \item{config}{file path to config.ini ,if not specified
-looks in run directory.}
+looks in top level of run directory.}
 
 \item{runDir}{file path to run directory.}
 
@@ -26,8 +26,6 @@ looks in run directory.}
 \item{verbose}{TRUE or FALSE. Messages on or off. Warnings/errors persist}
 }
 \value{
-A BCL2FastQparams object.
-
 A BCL2FastQparams object (See details).
 }
 \description{

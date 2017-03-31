@@ -1,17 +1,17 @@
-#' Generate a table of per sample summary demultiplexing statistics
+#' Generate an HTML table of per sample summary demultiplexing statistics
 #'
-#' Creates a table of per sample summary statistics from demultiplex results
-#'
+#' @usage
+#' \S4method{summaryDemuxTable}{baseCallQC}(object)
 #'
 #' @docType methods
 #' @name summaryDemuxTable
 #' @rdname summaryDemuxTable
-#'
+#' @aliases summaryDemuxTable summaryDemuxTable,baseCallQC-method
 #' @author Thomas Carroll
 #'
-#' @param BCLQC A basecall QC object as returned from basecallQC function
+#' @param object A  basecallQC object or list from call to demultiplexMetrics()
 #' @param output Whether the report contains frozen or sortable tables. Options are "static" and "html"
-#' @return Table A table for reporting demultiplexing results in an HTML.
+#' @return  An HTML table for reporting demultiplexing results.
 #' @import stringr XML RColorBrewer methods raster
 #' @examples
 #'
@@ -24,9 +24,9 @@
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' summaryDemuxTable(bclQC,output="static")
 #' @export
-summaryDemuxTable <- function(BCLQC,output="static"){
+summaryDemuxTable.basecallQC <- function(object,output="static"){
 
-  toTable <- BCLQC@demultiplexMetrics$summarisedDemuxStats$Summary
+  toTable <- object@demultiplexMetrics$summarisedDemuxStats$Summary
   if(output=="static"){
     return(kable(toTable))
   }
@@ -35,20 +35,46 @@ summaryDemuxTable <- function(BCLQC,output="static"){
   }
 }
 
-##' Generate a table of per sample summary basecalling statistics
+
+setGeneric("summaryDemuxTable", function(object="basecallQC",output="character") standardGeneric("summaryDemuxTable"))
+
+#' @rdname summaryDemuxTable
+#' @export
+setMethod("summaryDemuxTable", signature(object="basecallQC"), summaryDemuxTable.basecallQC)
+
+
+summaryDemuxTable.list <- function(object,output="static"){
+  toTable <- object$summarisedDemuxStats$Summary
+  if(output=="static"){
+    return(kable(toTable))
+  }
+  if(output=="html"){
+    return(DT::datatable(toTable))
+  }
+}
+
+#' @rdname summaryDemuxTable
+#' @export
+setMethod("summaryDemuxTable", signature(object="list"),summaryDemuxTable.list)
+
+
+
+
+
+#' Creates an HTML table of per sample summary statistics from basecalling results
 #'
-#' Creates a table of per sample summary statistics from basecalling results
-#'
-#'
+#' @usage
+#' \S4method{summaryConvStatsTable}{baseCallQC}(object)
+#' 
 #' @docType methods
 #' @name summaryConvStatsTable
 #' @rdname summaryConvStatsTable
-#'
+#' @aliases summaryConvStatsTable summaryConvStatsTable,baseCallQC-method
 #' @author Thomas Carroll
 #'
-#' @param BCLQC A basecall QC object as returned from basecallQC function
+#' @param object A  basecallQC object or list from call to baseCallMetrics()
 #' @param output Whether the report contains frozen or sortable tables. Options are "static" and "html"
-#' @return Table A table for reporting demultiplexing results in an HTML.
+#' @return An HTML table for reporting basecalling results.
 #' @import stringr XML RColorBrewer methods raster
 #' @examples
 #'
@@ -61,9 +87,9 @@ summaryDemuxTable <- function(BCLQC,output="static"){
 #' bclQC <- basecallQC(bcl2fastqparams,RunMetaData=NULL,sampleSheet)
 #' summaryDemuxTable(bclQC,output="static")
 #' @export
-summaryConvStatsTable <- function(BCLQC,output="static"){
+summaryConvStatsTable.basecallQC <- function(object,output="static"){
 
-  toTable <- BCLQC@baseCallMetrics$summarisedConvStats$Sample_Stats
+  toTable <- object@baseCallMetrics$summarisedConvStats$Sample_Stats
   if(output=="static"){
     return(kable(toTable))
   }
@@ -72,10 +98,32 @@ summaryConvStatsTable <- function(BCLQC,output="static"){
   }
 }
 
+setGeneric("summaryConvStatsTable", function(object="basecallQC",output="character") standardGeneric("summaryConvStatsTable"))
 
-#' Generate a table of per sample summary fastq QC statistics from ShortRead
+#' @rdname summaryConvStatsTable
+#' @export
+setMethod("summaryConvStatsTable", signature(object="basecallQC"), summaryConvStatsTable.basecallQC)
+
+
+summaryConvStatsTable.list <- function(object,output="static"){
+  
+  toTable <- object$summarisedConvStats$Sample_Stats
+  if(output=="static"){
+    return(kable(toTable))
+  }
+  if(output=="html"){
+    return(DT::datatable(toTable))
+  }
+}
+
+#' @rdname summaryConvStatsTable
+#' @export
+setMethod("summaryConvStatsTable", signature(object="list"),summaryConvStatsTable.list)
+
+
+#' Generate an HTML table linking to per sample summary fastq QC statistics from ShortRead
 #'
-#' Creates a table of per sample summary statistics from fastq QC statistics from ShortRead
+#' Creates an HTML table linking to per sample summary fastq QC statistics from ShortRead
 #'
 #'
 #' @docType methods
@@ -84,9 +132,10 @@ summaryConvStatsTable <- function(BCLQC,output="static"){
 #'
 #' @author Thomas Carroll
 #'
-#' @param BCLQC A basecall QC object as returned from basecallQC function
+#' @param object A basecall QC object as returned from basecallQC function
 #' @param output Whether the report contains frozen or sortable tables. Options are "static" and "html"
-#' @return Table A table for reporting fastq QC results from ShortRead in an HTML report.
+#' @return A HTML table for reporting fastq QC results from ShortRead. 
+#' Table contains read counts and links to ShortRead QA reports per sample.
 #' @import stringr XML RColorBrewer methods raster
 #' @examples
 #'
@@ -100,8 +149,8 @@ summaryConvStatsTable <- function(BCLQC,output="static"){
 #' #makeFQTable(bclQC,output="static")
 #' @export
 
-makeFQTable <- function(BCLQC,output="static"){
-  fqQCTable <- BCLQC@fqQCmetrics$FQQC_Table
+makeFQTable <- function(object,output="static"){
+  fqQCTable <- object@fqQCmetrics$FQQC_Table
     if(!is.null(fqQCTable)){
       if(output=="static"){
         table <- kable(fqQCTable,escape = FALSE)

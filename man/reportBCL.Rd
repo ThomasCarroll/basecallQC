@@ -15,7 +15,7 @@
   reportRMDfile = NULL, FQQC = FALSE)
 }
 \arguments{
-\item{object}{A basecall QC object as returned from basecallQC function}
+\item{object}{A basecall QC object as returned from basecallQC() function}
 
 \item{reportOut}{Name of report file}
 
@@ -25,13 +25,13 @@
 
 \item{reportRMDfile}{RMD to be used for reporting. (Default uses standard report template)}
 
-\item{FQQC}{TRUE or FALSE, whether to run ShortRead fastq QC.}
+\item{FQQC}{TRUE or FALSE, whether to run ShortRead fastq QC on any fastQ in output directory.}
 }
 \value{
-RenderedReport A rendered report.
+An HTML report is written to file.
 }
 \description{
-Creates a summary report for basecalling and demultiplexing statistics.
+Creates a summary report from basecalling and demultiplexing metrics.
 }
 \examples{
 

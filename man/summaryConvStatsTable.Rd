@@ -3,20 +3,30 @@
 \docType{methods}
 \name{summaryConvStatsTable}
 \alias{summaryConvStatsTable}
-\title{Generate a table of per sample summary basecalling statistics}
+\alias{summaryConvStatsTable.basecallQC}
+\alias{summaryConvStatsTable,baseCallQC-method}
+\alias{summaryConvStatsTable,basecallQC-method}
+\alias{summaryConvStatsTable,list-method}
+\title{Creates an HTML table of per sample summary statistics from basecalling results}
 \usage{
-summaryConvStatsTable(BCLQC, output = "static")
+\S4method{summaryConvStatsTable}{baseCallQC}(object)
+
+\S4method{summaryConvStatsTable}{basecallQC}(object = "basecallQC",
+  output = "static")
+
+\S4method{summaryConvStatsTable}{list}(object = "basecallQC",
+  output = "static")
 }
 \arguments{
-\item{BCLQC}{A basecall QC object as returned from basecallQC function}
+\item{object}{A  basecallQC object or list from call to baseCallMetrics()}
 
 \item{output}{Whether the report contains frozen or sortable tables. Options are "static" and "html"}
 }
 \value{
-Table A table for reporting demultiplexing results in an HTML.
+An HTML table for reporting basecalling results.
 }
 \description{
-Creates a table of per sample summary statistics from basecalling results
+Creates an HTML table of per sample summary statistics from basecalling results
 }
 \examples{
 

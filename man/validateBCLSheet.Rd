@@ -3,22 +3,23 @@
 \docType{methods}
 \name{validateBCLSheet}
 \alias{validateBCLSheet}
-\title{Illumina samplesheet cleaning and updating for
+\title{Illumina sample sheet cleaning and updating for
 bcl2Fastq versions >= 2.1.7}
 \usage{
 validateBCLSheet(sampleSheet, param = bcl2fastqparams)
 }
 \arguments{
-\item{sampleSheet}{File location of samplesheet for Illumina basecalling (see vignette for more details)}
+\item{sampleSheet}{File location of a sample sheet for Illumina basecalling using bcl2Fastq (See vignette for more details).}
 
 \item{param}{A BCL2FastQparams object}
 }
 \value{
-cleanedSampleSheet A data.frame containing cleaned samplesheet.
+cleanedSampleSheet A data.frame containing the cleaned sample sheet for
+ Illumina basecalling using bcl2Fastq versions >= 2.1.7.
 }
 \description{
-Parses an Illumina sample sheet  to create
-standardised/updated samplesheet for bcl2Fastq >= Version 2.1.7
+Parses an Illumina bcl2Fastq sample sheet  to create a
+standardised/updated sample sheet for bcl2Fastq >= Version 2.1.7
 }
 \examples{
 

@@ -6,23 +6,26 @@
 \alias{demuxBoxplot.basecallQC}
 \alias{demuxBoxplot,baseCallQC-method}
 \alias{demuxBoxplot,basecallQC-method}
+\alias{demuxBoxplot,list-method}
 \title{Boxplot of Illumina demultiplexing statistics.}
 \usage{
 \S4method{demuxBoxplot}{baseCallQC}(object,groupBy)
 
 \S4method{demuxBoxplot}{basecallQC}(object = "basecallQC",
   groupBy = c("Lane"))
+
+\S4method{demuxBoxplot}{list}(object = "basecallQC", groupBy = c("Lane"))
 }
 \arguments{
-\item{object}{baseCallQC A  basecall QC object}
+\item{object}{A  basecallQC object or list from call to demultiplexMetrics()}
 
-\item{groupBy}{Character vector of lane and/or Sample}
+\item{groupBy}{Character vector of how data is grouped for plotting. Should be either "Project","Sample" or "Lane".}
 }
 \value{
-ggPlotObject A ggplot2 object.
+A ggplot2 object.
 }
 \description{
-Produces a boxplot of for demultiplexing statistics of reads with perfect/mismatched barcode.
+Produces a boxplot of demultiplexing statistics of reads with perfect/mismatched barcode.
 }
 \examples{
 fileLocations <- system.file("extdata",package="basecallQC")

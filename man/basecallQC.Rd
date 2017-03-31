@@ -6,7 +6,7 @@
 \alias{basecallQC}
 \alias{basecallQC-basecallQC}
 \alias{basecallQC}
-\title{The basecallQC object.}
+\title{The basecallQC object and constructor.}
 \usage{
 basecallQC(bcl2fastqparams, RunMetaData = NULL, sampleSheet = NULL,
   doFQMetric = FALSE)
@@ -16,23 +16,21 @@ basecallQC(bcl2fastqparams, RunMetaData = NULL, sampleSheet = NULL,
 
 \item{RunMetaData}{Any run metadata to attach (data.frame)}
 
-\item{sampleSheet}{The sample sheet for Illumina basecalling using bcl2Fastq versions >= 2.1.7}
+\item{sampleSheet}{A sample sheet for Illumina basecalling using bcl2Fastq (See vignette for more details).}
 
 \item{doFQMetric}{TRUE or FALSE. Perform ShortRead FastQ quality assessment
 using ShortRead's qa and report function}
 }
 \value{
-A basecallQC object.
-
 basecallQC a basecallQC object (See details for more information)
 }
 \description{
-Objects and methods to handle Illumina basecalling/demultiplexing
+Object and method to handle Illumina basecalling/demultiplexing
 inputs and output files.
 Provides sample sheet cleanup, basecall command and
 summary QC statistics for basecalling/demultiplexing.
 
-The basecallQC function is a constructor for basecallQC objects.
+The basecallQC object and constructor.
 }
 \details{
 The basecallQC object contains slots BCL2FastQparams,
@@ -44,7 +42,7 @@ The basecallQC object contains slots BCL2FastQparams,
 }
 \item{"baseMasks"}{ A data.frame containing basecall masks per lane for use with bcl2Fastq versions >= 2.1.7. Basemasks in data.frame for reads and indexes as well as the total basemasks for each lane.
 }
-\item{"BCLCommand"}{ A character string containing the command to be used for basecalling using bcl2Fastq.
+\item{"BCLCommand"}{ A character string containing the command to be used for basecalling using bcl2Fastq (versions >= 2.1.7).
 }
 \item{"baseCallMetrics"}{ A list containing the full basecalling metrics from ConversionStats.xml. Contains an unsummarised data.frame and basecalling metrics summarised to Sample, Lane, Sample by lane, and Sample by Lane and Tile
 }

@@ -1,4 +1,4 @@
-#' The Parameters for BCL2FastQparameters object.
+#' The Parameters for BCL2FastQparams object.
 #'
 #' Parameter class and accessors for use with basecallQC
 #'
@@ -6,14 +6,13 @@
 #'
 #' @rdname BCL2FastQparams
 #' @docType class
-#' @return A BCL2FastQparams object.
 #' @export
 #'
 setClass("BCL2FastQparams", representation(RunDir="character",OutDir="character",RunParameters = "list"))
 
-#' The basecallQC object.
+#' The basecallQC object and constructor.
 #'
-#' Objects and methods to handle Illumina basecalling/demultiplexing
+#' Object and method to handle Illumina basecalling/demultiplexing
 #' inputs and output files.
 #' Provides sample sheet cleanup, basecall command and
 #' summary QC statistics for basecalling/demultiplexing.
@@ -22,7 +21,6 @@ setClass("BCL2FastQparams", representation(RunDir="character",OutDir="character"
 #'
 #' @rdname basecallQC
 #' @docType class
-#' @return A basecallQC object.
 #' @export
 
 setClass("basecallQC", representation(BCL2FastQparams="BCL2FastQparams",RunMetadata = "data.frame",
@@ -39,9 +37,9 @@ setClass("basecallQC", representation(BCL2FastQparams="BCL2FastQparams",RunMetad
 #' @rdname BCL2FastQparams
 #' @docType methods
 #' @param runXML file path to runParameters.xml ,if not specified
-#' looks in run directory.
+#' looks in top level of run directory.
 #' @param config file path to config.ini ,if not specified
-#' looks in run directory.
+#' looks in top level of run directory.
 #' @param runDir file path to run directory.
 #' @param outDir file path to out directory.
 #' @param verbose TRUE or FALSE. Messages on or off. Warnings/errors persist
@@ -86,13 +84,14 @@ BCL2FastQparams <- function(runXML=NULL,config=NULL,runDir=NULL,outDir=NULL,verb
   )
 
 }
-#' The basecallQC function is a constructor for basecallQC objects.
+#' The basecallQC object and constructor.
+#'
 #'
 #' @name basecallQC
 #' @rdname basecallQC
 #' @param bcl2fastqparams A BCL2FastQparams object as created by BCL2FastQparams() constructor.
 #' @param RunMetaData Any run metadata to attach (data.frame)
-#' @param sampleSheet The sample sheet for Illumina basecalling using bcl2Fastq versions >= 2.1.7
+#' @param sampleSheet A sample sheet for Illumina basecalling using bcl2Fastq (See vignette for more details).
 #' @param doFQMetric TRUE or FALSE. Perform ShortRead FastQ quality assessment
 #' using ShortRead's qa and report function
 #' @return basecallQC a basecallQC object (See details for more information)
@@ -105,7 +104,7 @@ BCL2FastQparams <- function(runXML=NULL,config=NULL,runDir=NULL,outDir=NULL,verb
 #' }
 #' \item{"baseMasks"}{ A data.frame containing basecall masks per lane for use with bcl2Fastq versions >= 2.1.7. Basemasks in data.frame for reads and indexes as well as the total basemasks for each lane.
 #' }
-#' \item{"BCLCommand"}{ A character string containing the command to be used for basecalling using bcl2Fastq.
+#' \item{"BCLCommand"}{ A character string containing the command to be used for basecalling using bcl2Fastq (versions >= 2.1.7).
 #' }
 #' \item{"baseCallMetrics"}{ A list containing the full basecalling metrics from ConversionStats.xml. Contains an unsummarised data.frame and basecalling metrics summarised to Sample, Lane, Sample by lane, and Sample by Lane and Tile
 #' }
@@ -153,6 +152,21 @@ runParams <- function(runXML=NULL,config=NULL){
   return(list(runParams=runParams,configParams=configParams))
 }
 
+#' Gather basecalling metrics from a Run (using Run's ConversionStats.xml file).
+#'
+#' @name baseCallMetrics
+#' @rdname baseCallMetrics
+#' @param bcl2fastqparams A BCL2FastQparams object as created by BCL2FastQparams() constructor.
+#' @return A list of length two containing the full basecalling metrics from a Run (using Run's ConversionStats.xml file). Contains an unsummarised data.frame and basecalling metrics summarised to Sample, Lane, Sample by lane, and Sample by Lane and Tile.
+#' @examples
+#' fileLocations <- system.file("extdata",package="basecallQC")
+#' runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
+#' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
+#' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
+#' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' convMetrics <- baseCallMetrics(bcl2fastqparams)
+#' @export
 baseCallMetrics <- function(bcl2fastqparams){
   convStatsXML <- file.path(bcl2fastqparams@OutDir,"Stats","ConversionStats.xml")
   if(!file.exists(convStatsXML)) return(list(convStatsProcessed=NULL,summarisedConvStats=NULL))
@@ -162,7 +176,21 @@ baseCallMetrics <- function(bcl2fastqparams){
                        summarisedConvStats=summarisedConvStats))
 }
 
-
+#' Gather demultiplexing metrics from a Run (using Run's DemultiplexingStats.xml file).
+#'
+#' @name demultiplexMetrics
+#' @rdname demultiplexMetrics
+#' @param bcl2fastqparams A BCL2FastQparams object as created by BCL2FastQparams() constructor.
+#' @return A list of length two containing the full demultiplexing metrics from a Run (using Run's DemultiplexingStats.xml file). Contains an unsummarised data.frame and demultiplexing metrics filtered to per Sample metrics 
+#' @examples
+#' fileLocations <- system.file("extdata",package="basecallQC")
+#' runXML <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
+#' config <- dir(fileLocations,pattern="config.ini",full.names=TRUE)
+#' sampleSheet <- dir(fileLocations,pattern="*\\.csv",full.names=TRUE)
+#' outDir <- file.path(fileLocations,"Runs/161105_D00467_0205_AC9L0AANXX/C9L0AANXX/")
+#' bcl2fastqparams <- BCL2FastQparams(runXML,config,runDir=getwd(),outDir,verbose=FALSE)
+#' demuxMetrics <- demultiplexMetrics(bcl2fastqparams)
+#' @export
 demultiplexMetrics <- function(bcl2fastqparams){
   demuxStatsXML <- file.path(bcl2fastqparams@OutDir,"Stats","DemultiplexingStats.xml")
   if(!file.exists(demuxStatsXML)) return(list(demuxStatsProcessed=NULL,summarisedDemuxStats=NULL))

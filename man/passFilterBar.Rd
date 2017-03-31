@@ -6,25 +6,29 @@
 \alias{passFilterBar.basecallQC}
 \alias{passFilterBar,baseCallQC-method}
 \alias{passFilterBar,basecallQC-method}
+\alias{passFilterBar,list-method}
 \title{Barplot of Illumina basecalling statistics for reads passing filter.}
 \usage{
 \S4method{passFilterBar}{baseCallQC}(object,groupBy,metricToPlot)
 
 \S4method{passFilterBar}{basecallQC}(object = "basecallQC",
   groupBy = c("Lane"), metricToPlot = "Yield")
+
+\S4method{passFilterBar}{list}(object = "basecallQC", groupBy = c("Lane"),
+  metricToPlot = "Yield")
 }
 \arguments{
-\item{object}{baseCallQC A  basecallQC object}
+\item{object}{A  basecallQC object or list from call to baseCallMetrics()}
 
-\item{groupBy}{Character vector defining how plot will be grouped}
+\item{groupBy}{Character vector of how data is grouped for plotting. Should be either "Project","Sample","Lane","Tile","ReadNumber".}
 
-\item{metricToPlot}{Character vector defining which metric will be displayed in plot.}
+\item{metricToPlot}{Character vector defining which metric will be displayed in plot. Should be either "Yield","Yield30","QualityScoreSum" or "ClusterCount".}
 }
 \value{
-ggPlotObject A ggplot2 object.
+A ggplot2 object.
 }
 \description{
-Produces a barplot of basecalling statistics for reads passing filter.
+Produces a barplot of Illumina basecalling statistics for reads passing filter.
 }
 \examples{
 fileLocations <- system.file("extdata",package="basecallQC")

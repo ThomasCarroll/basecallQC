@@ -6,23 +6,27 @@
 \alias{passFilterTilePlot.basecallQC}
 \alias{passFilterTilePlot,baseCallQC-method}
 \alias{passFilterTilePlot,basecallQC-method}
+\alias{passFilterTilePlot,list-method}
 \title{Tile plot of Illumina basecalling statistics for reads passing filter.}
 \usage{
 \S4method{passFilterTilePlot}{baseCallQC}(object,metricToPlot)
 
 \S4method{passFilterTilePlot}{basecallQC}(object = "basecallQC",
   metricToPlot = "Yield")
+
+\S4method{passFilterTilePlot}{list}(object = "basecallQC",
+  metricToPlot = "Yield")
 }
 \arguments{
-\item{object}{baseCallQC A  basecall QC object}
+\item{object}{A  basecallQC object or list from call to baseCallMetrics()}
 
-\item{metricToPlot}{Character vector defining which metric will be displayed in plot.}
+\item{metricToPlot}{Character vector defining which metric will be displayed in plot. Should be either "Yield","Yield30","QualityScoreSum" or "ClusterCount".}
 }
 \value{
-ggPlotObject A ggplot2 object.
+A ggplot2 object.
 }
 \description{
-Produces a plot of metrics per Tile for basecalling statistics of reads passing/failing filter.
+Produces a plot of metric per Tile for basecalling statistics of reads passing/failing filter.
 }
 \examples{
 fileLocations <- system.file("extdata",package="basecallQC")

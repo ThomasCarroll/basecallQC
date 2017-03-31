@@ -1,8 +1,8 @@
 
 #' Barplot of Illumina basecalling statistics for reads passing filter.
 #'
-#' Produces a barplot of basecalling statistics for reads passing filter.
-#'
+#' Produces a barplot of Illumina basecalling statistics for reads passing filter.
+#' 
 #' @usage
 #' \S4method{passFilterBar}{baseCallQC}(object,groupBy,metricToPlot)
 #'
@@ -12,10 +12,10 @@
 #' @aliases passFilterBar passFilterBar,baseCallQC-method
 #' 
 #' @author Thomas Carroll and Marian Dore
-#' @param object baseCallQC A  basecallQC object
-#' @param groupBy Character vector defining how plot will be grouped
-#' @param metricToPlot Character vector defining which metric will be displayed in plot.
-#' @return ggPlotObject A ggplot2 object.
+#' @param object A  basecallQC object or list from call to baseCallMetrics()
+#' @param groupBy Character vector of how data is grouped for plotting. Should be either "Project","Sample","Lane","Tile","ReadNumber".
+#' @param metricToPlot Character vector defining which metric will be displayed in plot. Should be either "Yield","Yield30","QualityScoreSum" or "ClusterCount".
+#' @return A ggplot2 object.
 #' @import stringr XML RColorBrewer methods raster BiocStyle
 #' @examples
 #' fileLocations <- system.file("extdata",package="basecallQC")
@@ -54,6 +54,30 @@ setGeneric("passFilterBar", function(object="basecallQC",groupBy="character",met
 setMethod("passFilterBar", signature(object="basecallQC"), passFilterBar.basecallQC)
 
 
+passFilterBar.list <- function(object,groupBy=c("Lane"),metricToPlot="Yield"){
+  groupByS <- unique(c(groupBy,"Filter"))
+  groupByG <- unique(c(groupBy))
+  toPlot <- object$convStatsProcessed %>%
+    group_by_(.dots=as.list(groupByS)) %>%
+    filter(Sample != "all") %>%
+    summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
+                                             var=as.name(metricToPlot))
+    )
+    ,metricToPlot)) %>%
+    spread_("Filter",metricToPlot) %>%
+    mutate(Ff=Raw-Pf) %>%
+    dplyr::select(-Raw) %>%
+    tbl_df %>%
+    gather_(key_col="PassFilter",value_col=as.name(metricToPlot),c("Ff","Pf"))
+  p <- ggplot(data=toPlot,aes_string(x=groupByG,y=metricToPlot,fill="PassFilter"))+geom_bar(stat = "identity")+ coord_flip()
+  return(p)
+}
+
+#' @rdname passFilterBar
+#' @export
+setMethod("passFilterBar", signature(object="list"),passFilterBar.list)
+
+
 #' Boxplot of Illumina basecalling statistics for reads passing filter.
 #'
 #' Produces a boxplot of basecalling statistics for reads passing filter.
@@ -66,10 +90,10 @@ setMethod("passFilterBar", signature(object="basecallQC"), passFilterBar.basecal
 #' @aliases passFilterBoxplot passFilterBoxplot,baseCallQC-method
 #' 
 #' @author Thomas Carroll and Marian Dore
-#' @param object basecallQC A  basecall QC object
-#' @param groupBy Character vector of how data is grouped for plotting.
-#' @param metricToPlot Character vector defining which metric will be displayed in plot.
-#' @return ggPlotObject A ggplot2 object.
+#' @param object A  basecallQC object or list from call to baseCallMetrics()
+#' @param groupBy Character vector of how data is grouped for plotting. Should be either "Project","Sample","Lane","Tile","ReadNumber".
+#' @param metricToPlot Character vector defining which metric will be displayed in plot. Should be either "Yield","Yield30","QualityScoreSum" or "ClusterCount".
+#' @return  A ggplot2 object.
 #' @import stringr XML RColorBrewer methods raster BiocStyle
 #' @examples
 #' fileLocations <- system.file("extdata",package="basecallQC")
@@ -106,10 +130,33 @@ setGeneric("passFilterBoxplot", function(object="basecallQC",groupBy="character"
 #' @export
 setMethod("passFilterBoxplot", signature(object="basecallQC"), passFilterBoxplot.basecallQC)
 
+passFilterBoxplot.list <- function(object,groupBy=c("Lane"),metricToPlot="Yield"){
+  groupByS <- unique(c("Lane","Sample","Tile","Filter"))
+  groupByG <- unique(c(groupBy))
+  toPlot <- object$convStatsProcessed %>%
+    group_by_(.dots=as.list(groupByS)) %>%
+    filter(Sample != "all") %>%
+    summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
+                                             var=as.name(metricToPlot))
+    )
+    ,metricToPlot)) %>%
+    spread_("Filter",metricToPlot) %>%
+    mutate(Ff=Raw-Pf) %>%
+    dplyr::select(-Raw) %>%
+    tbl_df %>%
+    gather_(key_col="PassFilter",value_col=as.name(metricToPlot),c("Ff","Pf"))
+  p <- ggplot(data=toPlot,aes_string(x=groupByG,y="Yield",fill="PassFilter"))+geom_violin(scale="width")+ coord_flip()+facet_grid(PassFilter~.,scales = "free")+geom_jitter()
+  return(p)
+}
+
+#' @rdname passFilterBoxplot
+#' @export
+setMethod("passFilterBoxplot", signature(object="list"),passFilterBoxplot.list)
+
 
 #' Tile plot of Illumina basecalling statistics for reads passing filter.
 #'
-#' Produces a plot of metrics per Tile for basecalling statistics of reads passing/failing filter.
+#' Produces a plot of metric per Tile for basecalling statistics of reads passing/failing filter.
 #'
 #' @usage
 #' \S4method{passFilterTilePlot}{baseCallQC}(object,metricToPlot)
@@ -118,9 +165,9 @@ setMethod("passFilterBoxplot", signature(object="basecallQC"), passFilterBoxplot
 #' @rdname passFilterTilePlot
 #' @aliases passFilterTilePlot passFilterTilePlot,baseCallQC-method
 #' @author Thomas Carroll and Marian Dore
-#' @param object baseCallQC A  basecall QC object
-#' @param metricToPlot Character vector defining which metric will be displayed in plot.
-#' @return ggPlotObject A ggplot2 object.
+#' @param object  A  basecallQC object or list from call to baseCallMetrics()
+#' @param metricToPlot Character vector defining which metric will be displayed in plot. Should be either "Yield","Yield30","QualityScoreSum" or "ClusterCount".
+#' @return A ggplot2 object.
 #' @import stringr XML RColorBrewer methods raster BiocStyle
 #' @examples
 #' fileLocations <- system.file("extdata",package="basecallQC")
@@ -161,10 +208,38 @@ setGeneric("passFilterTilePlot", function(object="basecallQC",metricToPlot="char
 #' @export
 setMethod("passFilterTilePlot", signature(object="basecallQC"), passFilterTilePlot.basecallQC)
 
+passFilterTilePlot.list <- function(object,metricToPlot="Yield"){
+  groupByS <- unique(c("Lane","Sample","Tile","Filter"))
+  #groupByG <- unique(c(groupBy))
+  toPlot <- object$convStatsProcessed %>%
+    group_by_(.dots=as.list(groupByS)) %>%
+    filter(Sample != "all") %>%
+    summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
+                                             var=as.name(metricToPlot))
+    )
+    ,metricToPlot)) %>%
+    spread_("Filter",metricToPlot) %>%
+    mutate(Ff=Raw-Pf) %>%
+    dplyr::select(-Raw) %>%
+    tbl_df %>%
+    gather_(key_col="PassFilter",value_col=as.name(metricToPlot),c("Ff","Pf")) %>%
+    mutate(Surface=str_sub(Tile,1,1),Box=str_sub(Tile,2,2),Pos=str_sub(Tile,3))
+  pPf <- filter(toPlot,PassFilter=="Pf") %>%
+    ggplot(aes(x=Box,y=Pos))+geom_tile(aes_string(fill=metricToPlot))+facet_grid(~Lane)+scale_fill_gradient2(low = "white", high = "darkblue")+theme_bw()
+  pFf <- filter(toPlot,PassFilter=="Ff") %>%
+    ggplot(aes(x=Box,y=Pos))+geom_tile(aes_string(fill=metricToPlot))+facet_grid(~Lane)+scale_fill_gradient2(low = "white", high = "darkblue")+theme_bw()
+  return(list(PassFilter=pPf,FailFilter=pFf))
+  
+}
+
+#' @rdname passFilterTilePlot
+#' @export
+setMethod("passFilterTilePlot", signature(object="list"),passFilterTilePlot.list)
+
 
 #' Boxplot of Illumina demultiplexing statistics.
 #'
-#' Produces a boxplot of for demultiplexing statistics of reads with perfect/mismatched barcode.
+#' Produces a boxplot of demultiplexing statistics of reads with perfect/mismatched barcode.
 #'
 #' @usage
 #' \S4method{demuxBoxplot}{baseCallQC}(object,groupBy)
@@ -173,9 +248,9 @@ setMethod("passFilterTilePlot", signature(object="basecallQC"), passFilterTilePl
 #' @rdname demuxBoxplot
 #' @aliases demuxBoxplot demuxBoxplot,baseCallQC-method
 #' @author Thomas Carroll and Marian Dore
-#' @param object baseCallQC A  basecall QC object
-#' @param groupBy Character vector of lane and/or Sample
-#' @return ggPlotObject A ggplot2 object.
+#' @param object A  basecallQC object or list from call to demultiplexMetrics()
+#' @param groupBy Character vector of how data is grouped for plotting. Should be either "Project","Sample" or "Lane".
+#' @return A ggplot2 object.
 #' @import stringr XML RColorBrewer methods raster BiocStyle
 #' @examples
 #' fileLocations <- system.file("extdata",package="basecallQC")
@@ -214,9 +289,36 @@ setGeneric("demuxBoxplot", function(object="basecallQC",groupBy="character") sta
 #' @export
 setMethod("demuxBoxplot", signature(object="basecallQC"), demuxBoxplot.basecallQC)
 
+demuxBoxplot.list <- function(object,groupBy=c("Lane")){
+  metricToPlot <- "Count"
+  groupByS <- unique(c("Lane","Sample","Project","Barcode","BarcodeStat"))
+  groupByG <- unique(c(groupBy))
+  
+  toPlot <- object$demuxStatsProcessed %>%
+    group_by_(.dots=as.list(groupByS)) %>%
+    filter(Sample != "all") %>%
+    summarise_(.dots = setNames(list(interp( ~sum(as.numeric(var)),
+                                             var=as.name(metricToPlot))
+    )
+    ,metricToPlot)) %>%
+    spread_("BarcodeStat",metricToPlot) %>%
+    mutate(mismatchedBarcodeCount=BarcodeCount-PerfectBarcodeCount) %>%
+    dplyr::select(-BarcodeCount) %>%
+    tbl_df %>%
+    gather_(key_col="BarcodeCount",value_col=as.name(metricToPlot),c("mismatchedBarcodeCount","PerfectBarcodeCount"))
+  p <- ggplot(data=toPlot,aes_string(x=groupByG,y=metricToPlot,fill="BarcodeCount"))+geom_violin(scale = "width")+ coord_flip()+facet_grid(BarcodeCount~.)
+  return(p)
+}
+
+#' @rdname demuxBoxplot
+#' @export
+setMethod("demuxBoxplot", signature(object="list"), demuxBoxplot.list)
+
+
+
 #' Barplot of Illumina demultiplexing statistics.
 #'
-#' Produces a barplot of for demultiplexing statistics of reads with perfect/mismatched barcode.
+#' Produces a barplot of demultiplexing statistics of reads with perfect/mismatched barcode.
 #'
 #' @usage
 #' \S4method{demuxBarplot}{baseCallQC}(object,groupBy)
@@ -225,9 +327,9 @@ setMethod("demuxBoxplot", signature(object="basecallQC"), demuxBoxplot.basecallQ
 #' @rdname demuxBarplot
 #' @aliases demuxBarplot demuxBarplot,baseCallQC-method
 #' @author Thomas Carroll and Marian Dore
-#' @param object baseCallQC A  basecall QC object
-#' @param groupBy Character vector of lane and/or Sample
-#' @return ggPlotObject A ggplot2 object.
+#' @param object A  basecallQC object or list from call to demultiplexMetrics()
+#' @param groupBy Character vector of how data is grouped for plotting. Should be either "Project","Sample" or "Lane".
+#' @return A ggplot2 object.
 #' @import stringr XML RColorBrewer methods raster BiocStyle
 #' @examples
 #' fileLocations <- system.file("extdata",package="basecallQC")

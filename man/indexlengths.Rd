@@ -16,10 +16,10 @@
 \item{object}{A BCL2FastQparams object}
 }
 \value{
-indexlengths. Index lengths as defined runParamaeters.xml
+Index lengths as defined runParameters.xml.
 }
 \description{
-Indexlengths as defined runParameters.xml
+Index lengths as defined by runParameters.xml
 }
 \examples{
 fileLocations <- system.file("extdata",package="basecallQC")

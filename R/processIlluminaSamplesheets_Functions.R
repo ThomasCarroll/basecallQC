@@ -6,14 +6,14 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("BarcodeCount","BarcodeS
                                                         "Sample_Project","Tile","Yield","bcl2fastqparams",
                                                         "index","index2","Index","Index2","Lane","basemask",
                                                         "index1Mask","index2Mask","indexLength","indexLength2",
-                                                        "read1Mask","read2Mask","."))
+                                                        "read1Mask","read2Mask","SampleRef","."))
 
 
-#' Illumina samplesheet cleaning and updating for
+#' Illumina sample sheet cleaning and updating for
 #' bcl2Fastq versions >= 2.1.7
 #'
-#' Parses an Illumina sample sheet  to create
-#' standardised/updated samplesheet for bcl2Fastq >= Version 2.1.7
+#' Parses an Illumina bcl2Fastq sample sheet  to create a
+#' standardised/updated sample sheet for bcl2Fastq >= Version 2.1.7
 #'
 #'
 #' @docType methods
@@ -21,9 +21,10 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("BarcodeCount","BarcodeS
 #' @rdname validateBCLSheet
 #'
 #' @author Thomas Carroll and Marian Dore
-#' @param sampleSheet File location of samplesheet for Illumina basecalling (see vignette for more details)
+#' @param sampleSheet File location of a sample sheet for Illumina basecalling using bcl2Fastq (See vignette for more details).
 #' @param param A BCL2FastQparams object
-#' @return cleanedSampleSheet A data.frame containing cleaned samplesheet.
+#' @return cleanedSampleSheet A data.frame containing the cleaned sample sheet for
+#'  Illumina basecalling using bcl2Fastq versions >= 2.1.7.
 #' @import stringr XML RColorBrewer methods raster BiocStyle lazyeval
 #' @examples
 #'
@@ -44,28 +45,31 @@ validateBCLSheet <- function(sampleSheet,param=bcl2fastqparams){
   {if(exists('ID', where = .) & !exists('Sample_ID', where = .)) dplyr::rename(.,Sample_ID = ID) else .} %>%
   {if(exists('SampleName', where = .) & !exists('Sample_Name', where = .)) dplyr::rename(.,Sample_Name = SampleName) else .} %>%
   {if(exists('Name', where = .) & !exists('Sample_Name', where = .)) dplyr::rename(.,Sample_Name = Name) else .} %>%
+  {if(exists('SampleRef', where = .) & !exists('Sample_Name', where = .)) dplyr::rename(.,Sample_Name = SampleRef) else .} %>%
   {if(exists('index', where = .) & !exists('Index', where = .)) dplyr::rename(.,Index = index) else .} %>%
   {if(exists('index2', where = .) & !exists('Index2', where = .)) dplyr::rename(.,Index2 = index2) else .} %>%
   {if(!exists('Index2', where = .)) tidyr::separate(.,Index, c("Index", "Index2"), "-",fill="right") else .} %>%
     mutate(Sample_Project = if (exists('Sample_Project', where = .)) Sample_Project else NA,
            Lane = if (exists('Lane', where = .)) Lane else NA,
-           Sample_ID = if (exists('Sample_ID', where = .)) Sample_ID else NA,
-           Sample_Name = if (exists('Sample_Name', where = .)) Sample_Name else NA,
+           Sample_ID = if (exists('Sample_ID', where = .)) Sample_ID else "",
+           Sample_Name = if (exists('Sample_Name', where = .)) Sample_Name else "",
            Index = if (exists('Index', where = .)) Index else NA,
            Index2 = if (exists('Index2', where = .)) Index2 else NA) %>%
     tbl_df %>%
     dplyr::select(Sample_Project,Lane,Sample_ID,Sample_Name,Index,Index2,everything()) %>%
     mutate(Sample_ID=gsub("^X\\d+.\\.","Sample_",validNames(Sample_ID))) %>%
+    mutate(Sample_Name=gsub("^X\\d+.\\.","Sample_",validNames(Sample_Name))) %>%
     mutate(Sample_ID=gsub("\\?|\\(|\\)|\\[|\\]|\\\\|/|\\=|\\+|<|>|\\:|\\;|\"|\'|\\*|\\^|\\||\\&|\\.","_",Sample_ID)) %>%
+    mutate(Sample_Name=gsub("\\?|\\(|\\)|\\[|\\]|\\\\|/|\\=|\\+|<|>|\\:|\\;|\"|\'|\\*|\\^|\\||\\&|\\.","_",Sample_Name)) %>%
     mutate(Index=str_trim(Index,"both"),
            Index2=str_trim(Index2,"both"))    %>%
   mutate(Index=str_sub(Index,1,as.numeric(indexlengths(param)$IndexRead1)),    # Will use runParamsIndexLength
          Index2=str_sub(Index2,1,as.numeric(indexlengths(param)$IndexRead2)))  # Will use runParamsIndexLength
 }
 
-#' Functions to create basemasks for basecalling from Illumina samplesheet.
+#' Function to create basemasks for basecalling from Illumina samplesheet (for bcl2Fastq versions >= 2.1.7).
 #'
-#' Parses the Illumina samplesheet for versions >= 2.1.7 and creates basemasks.
+#' Parses the Illumina sample sheet for versions >= 2.1.7 and creates basemasks.
 #'
 #'
 #' @docType methods
@@ -73,9 +77,9 @@ validateBCLSheet <- function(sampleSheet,param=bcl2fastqparams){
 #' @rdname createBasemasks
 #'
 #' @author Thomas Carroll and Marian Dore
-#' @param cleanedSampleSheet Data.frame of cleaned samplesheet for Illumina basecalling (see vignette for more details)
+#' @param cleanedSampleSheet Data.frame of cleaned samplesheet for Illumina basecalling using bcl2Fastq versions >= 2.1.7 (see vignette for more details)
 #' @param param A BCL2FastQparams object
-#' @return basemasks A data.frame containing basecall masks for reads and indexes.
+#' @return A data.frame containing basecall masks per lane for reads and indexes as well as per lane complete basemasks.
 #' @import stringr XML RColorBrewer methods raster BiocStyle
 #' @examples
 #'
@@ -114,9 +118,9 @@ createBasemasks <- function(cleanedSampleSheet,param){
       }
 }
 
-#' Functions to create command for Illumina demultiplexing using bcl2fastq versions > 2.1.7.
+#' Function to create command for Illumina basecalling/demultiplexing using bcl2fastq versions >= 2.1.7.
 #'
-#' Creates the command to be used for demultiplexing with bcl2fastq versions > 2.1.7
+#' Creates the command to be used for basecalling/demultiplexing with bcl2fastq versions >= 2.1.7
 #'
 #'
 #' @docType methods
@@ -124,10 +128,10 @@ createBasemasks <- function(cleanedSampleSheet,param){
 #' @rdname createBCLcommand
 #'
 #' @author Thomas Carroll and Marian Dore
-#' @param bcl2fastqparams A BCL2FastQparams object
-#' @param cleanedSampleSheet Data.frame of cleaned samplesheet for Illumina basecalling (see vignette for more details)
-#' @param baseMasks A data.frame of basemasks as created by createBasemasks function
-#' @return bclCommand A character vector containing the command for Illumina basecalling
+#' @param bcl2fastqparams A BCL2FastQparams object.
+#' @param cleanedSampleSheet Data.frame of cleaned samplesheet for Illumina basecalling/demultiplexing using bcl2fastq versions >= 2.1.7 (see vignette for more details)
+#' @param baseMasks A data.frame of basemasks as created by createBasemasks() function
+#' @return A character vector containing the command for Illumina basecalling using bcl2fastq versions >= 2.1.7
 #' @import stringr XML RColorBrewer methods raster BiocStyle
 #' @examples
 #'

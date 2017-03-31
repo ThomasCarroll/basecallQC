@@ -1,6 +1,6 @@
 #' Generate basecallQC report
 #'
-#' Creates a summary report for basecalling and demultiplexing statistics.
+#' Creates a summary report from basecalling and demultiplexing metrics.
 #'
 #' @usage
 #' \S4method{reportBCL}{basecallQC}(object,reportOut,reportOutDir,output,reportRMDfile,FQQC)
@@ -10,13 +10,13 @@
 #' @aliases reportBCL reportBCL,baseCallQC-method
 #' @author Thomas Carroll
 #'
-#' @param object A basecall QC object as returned from basecallQC function
+#' @param object A basecall QC object as returned from basecallQC() function
 #' @param reportOut Name of report file
 #' @param reportOutDir Directory for the report file
 #' @param output Whether the report contains frozen or sortable tables. Options are "static" and "html"
 #' @param reportRMDfile RMD to be used for reporting. (Default uses standard report template)
-#' @param FQQC TRUE or FALSE, whether to run ShortRead fastq QC.
-#' @return RenderedReport A rendered report.
+#' @param FQQC TRUE or FALSE, whether to run ShortRead fastq QC on any fastQ in output directory.
+#' @return An HTML report is written to file.
 #' @import stringr XML RColorBrewer methods raster ShortRead prettydoc
 #' @examples
 #'

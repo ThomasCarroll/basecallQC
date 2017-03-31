@@ -3,20 +3,20 @@
 \docType{methods}
 \name{createBasemasks}
 \alias{createBasemasks}
-\title{Functions to create basemasks for basecalling from Illumina samplesheet.}
+\title{Function to create basemasks for basecalling from Illumina samplesheet (for bcl2Fastq versions >= 2.1.7).}
 \usage{
 createBasemasks(cleanedSampleSheet, param)
 }
 \arguments{
-\item{cleanedSampleSheet}{Data.frame of cleaned samplesheet for Illumina basecalling (see vignette for more details)}
+\item{cleanedSampleSheet}{Data.frame of cleaned samplesheet for Illumina basecalling using bcl2Fastq versions >= 2.1.7 (see vignette for more details)}
 
 \item{param}{A BCL2FastQparams object}
 }
 \value{
-basemasks A data.frame containing basecall masks for reads and indexes.
+A data.frame containing basecall masks per lane for reads and indexes as well as per lane complete basemasks.
 }
 \description{
-Parses the Illumina samplesheet for versions >= 2.1.7 and creates basemasks.
+Parses the Illumina sample sheet for versions >= 2.1.7 and creates basemasks.
 }
 \examples{
 

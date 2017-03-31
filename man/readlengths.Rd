@@ -16,10 +16,10 @@
 \item{object}{A BCL2FastQparams object}
 }
 \value{
-readlengths. Readlengths as defined runParamaeters.xml
+Read lengths as defined runParamaeters.xml
 }
 \description{
-Readlengths as defined by runParameters.xml
+Read lengths as defined by runParameters.xml
 }
 \examples{
 fileLocations <- system.file("extdata",package="basecallQC")

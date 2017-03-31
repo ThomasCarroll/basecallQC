@@ -17,15 +17,15 @@
 \S4method{demuxBarplot}{list}(object = "basecallQC", groupBy = c("Lane"))
 }
 \arguments{
-\item{object}{baseCallQC A  basecall QC object}
+\item{object}{A  basecallQC object or list from call to demultiplexMetrics()}
 
-\item{groupBy}{Character vector of lane and/or Sample}
+\item{groupBy}{Character vector of how data is grouped for plotting. Should be either "Project","Sample" or "Lane".}
 }
 \value{
-ggPlotObject A ggplot2 object.
+A ggplot2 object.
 }
 \description{
-Produces a barplot of for demultiplexing statistics of reads with perfect/mismatched barcode.
+Produces a barplot of demultiplexing statistics of reads with perfect/mismatched barcode.
 }
 \examples{
 fileLocations <- system.file("extdata",package="basecallQC")

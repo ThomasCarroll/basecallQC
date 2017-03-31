@@ -3,22 +3,22 @@
 \docType{methods}
 \name{createBCLcommand}
 \alias{createBCLcommand}
-\title{Functions to create command for Illumina demultiplexing using bcl2fastq versions > 2.1.7.}
+\title{Function to create command for Illumina basecalling/demultiplexing using bcl2fastq versions >= 2.1.7.}
 \usage{
 createBCLcommand(bcl2fastqparams, cleanedSampleSheet, baseMasks)
 }
 \arguments{
-\item{bcl2fastqparams}{A BCL2FastQparams object}
+\item{bcl2fastqparams}{A BCL2FastQparams object.}
 
-\item{cleanedSampleSheet}{Data.frame of cleaned samplesheet for Illumina basecalling (see vignette for more details)}
+\item{cleanedSampleSheet}{Data.frame of cleaned samplesheet for Illumina basecalling/demultiplexing using bcl2fastq versions >= 2.1.7 (see vignette for more details)}
 
-\item{baseMasks}{A data.frame of basemasks as created by createBasemasks function}
+\item{baseMasks}{A data.frame of basemasks as created by createBasemasks() function}
 }
 \value{
-bclCommand A character vector containing the command for Illumina basecalling
+A character vector containing the command for Illumina basecalling using bcl2fastq versions >= 2.1.7
 }
 \description{
-Creates the command to be used for demultiplexing with bcl2fastq versions > 2.1.7
+Creates the command to be used for basecalling/demultiplexing with bcl2fastq versions >= 2.1.7
 }
 \examples{
 

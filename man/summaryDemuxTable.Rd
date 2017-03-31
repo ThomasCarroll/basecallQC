@@ -3,20 +3,29 @@
 \docType{methods}
 \name{summaryDemuxTable}
 \alias{summaryDemuxTable}
-\title{Generate a table of per sample summary demultiplexing statistics}
+\alias{summaryDemuxTable.basecallQC}
+\alias{summaryDemuxTable,baseCallQC-method}
+\alias{summaryDemuxTable,basecallQC-method}
+\alias{summaryDemuxTable,list-method}
+\title{Generate an HTML table of per sample summary demultiplexing statistics}
 \usage{
-summaryDemuxTable(BCLQC, output = "static")
+\S4method{summaryDemuxTable}{baseCallQC}(object)
+
+\S4method{summaryDemuxTable}{basecallQC}(object = "basecallQC",
+  output = "static")
+
+\S4method{summaryDemuxTable}{list}(object = "basecallQC", output = "static")
 }
 \arguments{
-\item{BCLQC}{A basecall QC object as returned from basecallQC function}
+\item{object}{A  basecallQC object or list from call to demultiplexMetrics()}
 
 \item{output}{Whether the report contains frozen or sortable tables. Options are "static" and "html"}
 }
 \value{
-Table A table for reporting demultiplexing results in an HTML.
+An HTML table for reporting demultiplexing results.
 }
 \description{
-Creates a table of per sample summary statistics from demultiplex results
+Generate an HTML table of per sample summary demultiplexing statistics
 }
 \examples{
 

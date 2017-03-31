@@ -6,22 +6,26 @@
 \alias{passFilterBoxplot.basecallQC}
 \alias{passFilterBoxplot,baseCallQC-method}
 \alias{passFilterBoxplot,basecallQC-method}
+\alias{passFilterBoxplot,list-method}
 \title{Boxplot of Illumina basecalling statistics for reads passing filter.}
 \usage{
 \S4method{passFilterBoxplot}{baseCallQC}(object,groupBy,metricToPlot)
 
 \S4method{passFilterBoxplot}{basecallQC}(object = "basecallQC",
   groupBy = c("Lane"), metricToPlot = "Yield")
+
+\S4method{passFilterBoxplot}{list}(object = "basecallQC",
+  groupBy = c("Lane"), metricToPlot = "Yield")
 }
 \arguments{
-\item{object}{basecallQC A  basecall QC object}
+\item{object}{A  basecallQC object or list from call to baseCallMetrics()}
 
-\item{groupBy}{Character vector of how data is grouped for plotting.}
+\item{groupBy}{Character vector of how data is grouped for plotting. Should be either "Project","Sample","Lane","Tile","ReadNumber".}
 
-\item{metricToPlot}{Character vector defining which metric will be displayed in plot.}
+\item{metricToPlot}{Character vector defining which metric will be displayed in plot. Should be either "Yield","Yield30","QualityScoreSum" or "ClusterCount".}
 }
 \value{
-ggPlotObject A ggplot2 object.
+A ggplot2 object.
 }
 \description{
 Produces a boxplot of basecalling statistics for reads passing filter.

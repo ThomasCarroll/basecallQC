@@ -3,20 +3,21 @@
 \docType{methods}
 \name{makeFQTable}
 \alias{makeFQTable}
-\title{Generate a table of per sample summary fastq QC statistics from ShortRead}
+\title{Generate an HTML table linking to per sample summary fastq QC statistics from ShortRead}
 \usage{
-makeFQTable(BCLQC, output = "static")
+makeFQTable(object, output = "static")
 }
 \arguments{
-\item{BCLQC}{A basecall QC object as returned from basecallQC function}
+\item{object}{A basecall QC object as returned from basecallQC function}
 
 \item{output}{Whether the report contains frozen or sortable tables. Options are "static" and "html"}
 }
 \value{
-Table A table for reporting fastq QC results from ShortRead in an HTML report.
+A HTML table for reporting fastq QC results from ShortRead. 
+Table contains read counts and links to ShortRead QA reports per sample.
 }
 \description{
-Creates a table of per sample summary statistics from fastq QC statistics from ShortRead
+Creates an HTML table linking to per sample summary fastq QC statistics from ShortRead
 }
 \examples{
 

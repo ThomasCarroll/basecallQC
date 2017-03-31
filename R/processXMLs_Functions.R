@@ -1,25 +1,3 @@
-#' Demultiplex parser.
-#'
-#' Parses the DemultiplexingStats.xml from Illumina Basecalling
-#'
-#'
-#' @docType methods
-#' @name processDemultiplex
-#' @rdname processDemultiplex
-#'
-#' @author Thomas Carroll
-#'
-#' @param demuxStatsXML Demultiplex locations.
-#' @return A datatable of XML results.
-#' @import stringr DT XML RColorBrewer methods raster dplyr magrittr tidyr reshape2 ggplot2 lubridate
-#' @examples
-#'
-#' fileLocations <- system.file("extdata",package="basecallQC")
-#'
-#' demuxStats <- dir(fileLocations,pattern="DemultiplexingStats.xml",full.names=TRUE)
-#' demuxProcessed <-processDemultiplex(demuxStats)
-#'
-#' @export
 processDemultiplex <- function(demuxStatsXML){
 
   if(file.exists(demuxStatsXML)){
@@ -73,29 +51,6 @@ processDemultiplex <- function(demuxStatsXML){
 }
 
 
-
-#' Converstion stats parser.
-#'
-#' Parses the ConversionStats.xml from Illumina Basecalling
-#'
-#'
-#' @docType methods
-#' @name processConvStats
-#' @rdname processConvStats
-#'
-#' @author Thomas Carroll
-#'
-#' @param ConvStatsXML ConversionStats locations.
-#' @return A datatable of XML results.
-#' @import stringr XML RColorBrewer methods raster
-#' @examples
-#'
-#' fileLocations <- system.file("extdata",package="basecallQC")
-#'
-#' convStats <- dir(fileLocations,pattern="ConversionStats.xml",full.names=TRUE)
-#' convProcessed <-processConvStats(convStats)
-#'
-#' @export
 
 processConvStats <- function(ConvStatsXML){
 
@@ -189,29 +144,6 @@ processConvStats <- function(ConvStatsXML){
   return(NULL)
 }
 
-#' Generate per sample summary statistics
-#'
-#' Creates per sample summary statistics from demultiplex results
-#'
-#'
-#' @docType methods
-#' @name summariseDemuxStats
-#' @rdname summariseDemuxStats
-#'
-#' @author Thomas Carroll
-#'
-#' @param demuxProcessed Results from a call to processDemultiplex.
-#' @return summarisedDemuxStats A datatable of summarised per sample results.
-#' @import stringr XML RColorBrewer methods raster
-#' @examples
-#'
-#' fileLocations <- system.file("extdata",package="basecallQC")
-#'
-#' demuxStats <- dir(fileLocations,pattern="DemultiplexingStats.xml",full.names=TRUE)
-#' demuxProcessed <- processDemultiplex(demuxStats)
-#' samplesDemuxStats <- summariseDemuxStats(demuxProcessed)
-#'
-#' @export
 summariseDemuxStats <- function(demuxProcessed){
   #Lane_Stats4 <- Test %>% filter(Sample != "all" & BarcodeStat == "BarcodeCount") %>% group_by(Project,Sample) %>% summarise(Count=sum(as.numeric(Count)))
   #Lane_Stats <- Projects_DF %>% filter(Sample == "all") %>% group_by(Lane,Filter) %>% summarise(sum(Yield))
@@ -240,29 +172,6 @@ summariseDemuxStats <- function(demuxProcessed){
   return(NULL)
 }
 
-#' Generate per sample summary statistics
-#'
-#' Creates per sample summary statistics from demultiplex results
-#'
-#'
-#' @docType methods
-#' @name summariseConvStats
-#' @rdname summariseConvStats
-#'
-#' @author Thomas Carroll
-#'
-#' @param convStatsProcessed Results from a call to processConvStats.
-#' @return summarisedDemuxStats A datatable of summarised per sample results.
-#' @import stringr XML RColorBrewer methods raster
-#' @examples
-#'
-#' fileLocations <- system.file("extdata",package="basecallQC")
-#'
-#' convStats <- dir(fileLocations,pattern="ConversionStats.xml",full.names=TRUE)
-#' convStatsProcessed <- processConvStats(convStats)
-#' summarisedConvStats <- summariseConvStats(convStatsProcessed)
-#'
-#' @export
 summariseConvStats <- function(convStatsProcessed){
   #Lane_Stats4 <- Test %>% filter(Sample != "all" & BarcodeStat == "BarcodeCount") %>% group_by(Project,Sample) %>% summarise(Count=sum(as.numeric(Count)))
   #Lane_Stats <- Projects_DF %>% filter(Sample == "all") %>% group_by(Lane,Filter) %>% summarise(sum(Yield))
@@ -286,28 +195,6 @@ summariseConvStats <- function(convStatsProcessed){
 }
 
 
-#' Parses parameters for illumina basecalling.
-#'
-#' Creates data.frame of run parameters.
-#'
-#'
-#' @docType methods
-#' @name runParameters
-#' @rdname runParameters
-#'
-#' @author Thomas Carroll
-#'
-#' @param runParameters file path to runParameters.xml .
-#' @return A datatable of run parameter.
-#' @import stringr XML RColorBrewer methods raster dplyr data.table stringr
-#' @examples
-#'
-#' fileLocations <- system.file("extdata",package="basecallQC")
-#'
-#' runParameters <- dir(fileLocations,pattern="runParameters.xml",full.names=TRUE)
-#' runParametersProcessed <- runParameters(runParameters)
-#'
-#' @export
 runParameters <- function(runParameters = NULL){
 
   xmlFromRunParameters <- xmlParse(runParameters)
