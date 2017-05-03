@@ -65,4 +65,8 @@ setGeneric("indexlengths", function(object="BCL2FastQparams") standardGeneric("i
 setMethod("indexlengths", signature(object="BCL2FastQparams"), indexlengths.bcl2fastqparams)
 
 
+readPattern <- function(bcl2fastqparams){
+  c(readlengths(bcl2fastqparams)[1],indexlengths(bcl2fastqparams)[1],
+    indexlengths(bcl2fastqparams)[2],readlengths(bcl2fastqparams)[2])
+}
 

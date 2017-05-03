@@ -23,4 +23,5 @@ Collate:
   reporting.R
   tables.R
   FastQCShortRead_Functions.R
+  processInterOps_Functions.R
 RoxygenNote: 6.0.1

@@ -21,6 +21,7 @@ export(summaryDemuxTable)
 export(validateBCLSheet)
 export(baseCallMetrics)
 export(demultiplexMetrics)
+export(interOpsReport)
 exportClasses(BCL2FastQparams)
 exportClasses(basecallQC)
 exportMethods(indexlengths)
@@ -66,7 +67,7 @@ importFrom(rmarkdown, render)
 
 importFrom(stats, setNames)
 
-importFrom(stringr, str_c, str_dup, str_length, str_replace, str_sub, str_trim)
+importFrom(stringr, str_c, str_dup, str_length, str_replace, str_sub, str_trim, str_to_upper)
 
 importFrom(tidyr, gather, gather_, spread_)
 
