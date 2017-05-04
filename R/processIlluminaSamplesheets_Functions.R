@@ -10,7 +10,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("BarcodeCount","BarcodeS
                                                         "meanPhasingForRead1","meanPhasingForRead2","meanPrePhasingForRead1",
                                                         "meanPrePhasingForRead2","percent_PF_Clusters","percent_PF_ClustersSD","q30",
                                                         "sd","sdClusterDensity","spread","starts_with","str_replace_all","summarise_all",
-                                                        "ungroup","value",
+                                                        "ungroup","value","packageVersion",
                                                         "Raw","Read1","Read2","Sample","SampleID",
                                                         "SampleName","Sample_ID","Sample_Name",
                                                         "Sample_Project","Tile","Yield","bcl2fastqparams",

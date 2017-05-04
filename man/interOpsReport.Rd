@@ -13,7 +13,7 @@ interOpsReport(bcl2fastqparams, verbose = TRUE)
 \item{verbose}{TRUE or FALSE . TRUE reports progress through file parsing.}
 }
 \value{
-A list of length 3 containing machine and run information, 
+A named list of length 3 containing machine and run information, 
 basecalling quality information and demultiplexing information.
 }
 \description{
@@ -23,6 +23,23 @@ InterOp binary files contain information on phasing/prephsing, yield,read number
 and basecalling quality score distributions per cycle.
 This interOpsReport functions parses and summarises the InterOps files, TileMetrics.bin and QMetrics.bin, and the 
 Stats directory XML files, ConversionStats.xml and DemultiplexingStats.xml.
+}
+\details{
+The interOpsReport function returns a list of machine and run 
+information, basecalling quality information and demultiplexing information.
+The three named elements are descibed below.  
+\itemize{
+\item{"machineReport"}{ A data.frame containing information machine and software parameters
+}
+\item{"sequencingReport"}{ A data.frame of mean cluster density, percentage clusters passing filter, phasing 
+and prephasing percentages, number of reads total/passing filter and percent of reads with mean quality score > Q30
+grouped by lane and read
+}
+\item{"demuxReport"}{ A data.frame of demultiplexing results containing yield, number of reads, percentage of reads
+with quality scores greater than >Q30 and the percent of total reads per lane.
+Results are summarised per lane for samples, underdetermined indexes and all indexes (identifed and unidentified).
+}
+}
 }
 \examples{
 

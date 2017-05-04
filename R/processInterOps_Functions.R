@@ -365,8 +365,23 @@ readInterOpsMetrics <- function(bcl2fastqparams,verbose=TRUE,
 #' @author Thomas Carroll.
 #' @param bcl2fastqparams A BCL2FastQparams object.
 #' @param verbose TRUE or FALSE . TRUE reports progress through file parsing.
-#' @return A list of length 3 containing machine and run information, 
+#' @return A named list of length 3 containing machine and run information, 
 #' basecalling quality information and demultiplexing information.
+#' @details The interOpsReport function returns a list of machine and run 
+#' information, basecalling quality information and demultiplexing information.
+#' The three named elements are descibed below.  
+#' \itemize{
+#' \item{"machineReport"}{ A data.frame containing information machine and software parameters
+#' }
+#' \item{"sequencingReport"}{ A data.frame of mean cluster density, percentage clusters passing filter, phasing 
+#' and prephasing percentages, number of reads total/passing filter and percent of reads with mean quality score > Q30
+#' grouped by lane and read
+#' }
+#' \item{"demuxReport"}{ A data.frame of demultiplexing results containing yield, number of reads, percentage of reads
+#' with quality scores greater than >Q30 and the percent of total reads per lane.
+#' Results are summarised per lane for samples, underdetermined indexes and all indexes (identifed and unidentified).
+#' }
+#' }
 #' 
 #' @import stringr XML RColorBrewer methods raster BiocStyle
 #' @examples
@@ -415,7 +430,9 @@ interOpsReport <- function(bcl2fastqparams,verbose=TRUE){
                   ChemistryVersion,RunMode,
                   ApplicationName,ApplicationVersion,
                   RTAVersion
-    ) %>%  t
+    ) %>%
+    mutate(basecallQC_Version=as.character(packageVersion("basecallQC"))) %>% 
+    t
   
   if(verbose){message("done",appendLF = TRUE)}
   if(verbose){message("Parsing InterOps binary files..",appendLF = FALSE)}
